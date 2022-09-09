@@ -1,5 +1,6 @@
 <template>
   <a-modal
+    :maskClosable="false"
     :title="id ? '编辑处方' : '新建处方'"
     :width="840"
     :visible="visible"
