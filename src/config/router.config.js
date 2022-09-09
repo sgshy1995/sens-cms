@@ -21,7 +21,7 @@ export const asyncRouterMap = [
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
+        meta: { title: 'menu.dashboard', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] },
         children: [
           {
             path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
@@ -40,6 +40,22 @@ export const asyncRouterMap = [
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
             meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard'] }
+          }
+        ]
+      },
+      {
+        path: '/recovery',
+        name: 'recovery',
+        component: RouteView,
+        redirect: '/recovery/prescription',
+        meta: { title: '康复管理', icon: 'table', permission: ['recovery'] },
+        children: [
+          {
+            path: '/recovery/prescription',
+            name: 'Prescription',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/recovery/Prescription'),
+            meta: { title: '运动处方', keepAlive: true, permission: ['recovery'] }
           }
         ]
       },

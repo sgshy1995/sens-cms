@@ -3,7 +3,7 @@
     <template v-slot:content>
       <div class="page-header-content">
         <div class="avatar">
-          <a-avatar size="large" :src="currentUser.avatar" />
+          <a-avatar size="large" :src="userInfo.avatar ? baseUrl + userInfo.avatar : currentUser.avatar" />
         </div>
         <div class="content">
           <div class="content-title">
@@ -158,7 +158,7 @@ export default {
       radarLoading: true,
       activities: [],
       teams: [],
-
+      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
       // data
       axis1Opts: {
         dataKey: 'item',

@@ -1,6 +1,6 @@
 <template>
   <div :class="wrpCls">
-    <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
+    <avatar-dropdown :menu="showMenu" :current-user="userInfo" :class="prefixCls" />
     <select-lang :class="prefixCls" />
   </div>
 </template>
@@ -8,6 +8,7 @@
 <script>
 import AvatarDropdown from './AvatarDropdown'
 import SelectLang from '@/components/SelectLang'
+import { mapState } from "vuex";
 
 export default {
   name: 'RightContent',
@@ -45,7 +46,10 @@ export default {
         'ant-pro-global-header-index-right': true,
         [`ant-pro-global-header-index-${(this.isMobile || !this.topMenu) ? 'light' : this.theme}`]: true
       }
-    }
+    },
+    ...mapState({
+      userInfo: state => state.user.info
+    }),
   },
   mounted () {
     setTimeout(() => {

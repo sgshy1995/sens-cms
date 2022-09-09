@@ -19,10 +19,10 @@ const errorHandler = (error) => {
     // 从 localstorage 获取 token
     const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
-      notification.error({
+      /*notification.error({
         message: 'Forbidden',
         description: data.message
-      })
+      })*/
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({
@@ -31,9 +31,9 @@ const errorHandler = (error) => {
       })
       if (token) {
         store.dispatch('Logout').then(() => {
-          setTimeout(() => {
+          /*setTimeout(() => {
             window.location.reload()
-          }, 1500)
+          }, 1500)*/
         })
       }
     }
@@ -47,7 +47,7 @@ request.interceptors.request.use(config => {
   // 如果 token 存在
   // 让每个请求携带自定义 token 请根据实际情况自行修改
   if (token) {
-    config.headers[ACCESS_TOKEN] = token
+    config.headers.Authorization = 'Bearer ' + token
   }
   return config
 }, errorHandler)

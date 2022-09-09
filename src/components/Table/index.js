@@ -35,6 +35,10 @@ export default {
       type: Number,
       default: 10
     },
+    totalNum: {
+      type: Number,
+      default: 0
+    },
     showSizeChanger: {
       type: Boolean,
       default: true
@@ -242,7 +246,7 @@ export default {
     renderClear (callback) {
       if (this.selectedRowKeys.length <= 0) return null
       return (
-        <a style="margin-left: 24px" onClick={() => {
+        <a style="margin-left: 12px" onClick={() => {
           callback()
           this.clearSelected()
         }}>清空</a>
@@ -265,10 +269,11 @@ export default {
 
       // 绘制 alert 组件
       return (
-        <a-alert showIcon={true} style="margin-bottom: 16px">
+        <a-alert showIcon={true} style={{ marginBottom: "16px" }}>
           <template slot="message">
-            <span style="margin-right: 12px">已选择: <a style="font-weight: 600">{this.selectedRows.length}</a></span>
-            {needTotalItems}
+            <span style="margin-right: 12px">已选择: <a style="font-weight: 600">{this.selectedRows.length}</a> 条数据</span>
+            {/*{needTotalItems}*/}
+            { <span>总计 <span style="font-weight: bold">{this.totalNum}</span> 条数据</span> }
             {clearItem}
           </template>
         </a-alert>
