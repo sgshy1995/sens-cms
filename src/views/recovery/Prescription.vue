@@ -122,6 +122,7 @@
         :rowSelection="options.rowSelection"
         :showPagination="true"
         :totalNum="totalNum"
+        :scroll="{x: 1920}"
       >
         <span slot="serial" slot-scope="text, record, index">
           {{ index + 1 }}
@@ -305,7 +306,8 @@ const columns = [
     title: "操作",
     dataIndex: "action",
     width: "150px",
-    scopedSlots: { customRender: "action" }
+    scopedSlots: { customRender: "action" },
+    fixed: 'right'
   }
 ];
 
