@@ -264,6 +264,42 @@ const user = {
               },
               {
                 roleId: 'admin',
+                permissionId: 'store',
+                permissionName: '商城权限',
+                actions:
+                  '[{"action":"add","defaultCheck":false,"describe":"新增"},{"action":"import","defaultCheck":false,"describe":"导入"},{"action":"get","defaultCheck":false,"describe":"详情"},{"action":"update","defaultCheck":false,"describe":"修改"},{"action":"edit","defaultCheck":false,"describe":"编辑"}]',
+                actionEntitySet: [
+                  {
+                    action: 'add',
+                    describe: '新增',
+                    defaultCheck: false
+                  },
+                  {
+                    action: 'import',
+                    describe: '导入',
+                    defaultCheck: false
+                  },
+                  {
+                    action: 'get',
+                    describe: '详情',
+                    defaultCheck: false
+                  },
+                  {
+                    action: 'update',
+                    describe: '修改',
+                    defaultCheck: false
+                  },
+                  {
+                    action: 'edit',
+                    describe: '编辑',
+                    defaultCheck: false
+                  }
+                ],
+                actionList: null,
+                dataAccess: null
+              },
+              {
+                roleId: 'admin',
                 permissionId: 'table',
                 permissionName: '表格权限',
                 actions:

@@ -5,60 +5,47 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="处方标题">
-                <a-input @keypress.enter="$refs.table.refresh(true)" v-model="queryParam.title" placeholder="请输入处方标题模糊查询" />
+              <a-form-item label="课程标题">
+                <a-input @keypress.enter="$refs.table.refresh(true)" v-model="queryParam.title" placeholder="请输入课程标题模糊查询" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="处方类型">
-                <a-select v-model="queryParam.prescription_type" placeholder="请选择">
-                  <a-select-option value="0">文章</a-select-option>
-                  <a-select-option value="1">视频</a-select-option>
+              <a-form-item label="直播次数">
+                <a-select v-model="queryParam.live_num_range" placeholder="请选择">
+                  <a-select-option value="0">1-2次</a-select-option>
+                  <a-select-option value="1">3-5次</a-select-option>
+                  <a-select-option value="2">6-10次</a-select-option>
+                  <a-select-option value="3">11-20次</a-select-option>
+                  <a-select-option value="4">20次以上</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
               <a-col :md="8" :sm="24">
-                <a-form-item label="难度">
-                  <a-select v-model="queryParam.difficulty" placeholder="请选择">
-                    <a-select-option value="1">难度1</a-select-option>
-                    <a-select-option value="2">难度2</a-select-option>
-                    <a-select-option value="3">难度3</a-select-option>
-                    <a-select-option value="4">难度4</a-select-option>
-                    <a-select-option value="5">难度5</a-select-option>
+                <a-form-item label="售价范围">
+                  <a-select v-model="queryParam.price_range" placeholder="请选择">
+                    <a-select-option value="0">0-100</a-select-option>
+                    <a-select-option value="1">100-500</a-select-option>
+                    <a-select-option value="2">500-1000</a-select-option>
+                    <a-select-option value="3">1000-3000</a-select-option>
+                    <a-select-option value="4">3000-10000</a-select-option>
+                    <a-select-option value="5">10000以上</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
-                <a-form-item label="关节部位">
-                  <a-select v-model="queryParam.part" placeholder="请选择">
-                    <a-select-option value="0">肩关节</a-select-option>
-                    <a-select-option value="1">肘关节</a-select-option>
-                    <a-select-option value="2">腕关节</a-select-option>
-                    <a-select-option value="3">髋关节</a-select-option>
-                    <a-select-option value="4">膝关节</a-select-option>
-                    <a-select-option value="5">踝关节</a-select-option>
-                    <a-select-option value="6">脊柱</a-select-option>
+                <a-form-item label="是否折扣">
+                  <a-select v-model="queryParam.is_discount" placeholder="请选择">
+                    <a-select-option value="1">是</a-select-option>
+                    <a-select-option value="0">否</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
-                <a-form-item label="症状">
-                  <a-select v-model="queryParam.symptoms" placeholder="请选择">
-                    <a-select-option value="0">疼痛</a-select-option>
-                    <a-select-option value="1">肿胀</a-select-option>
-                    <a-select-option value="2">活动受限</a-select-option>
-                    <a-select-option value="3">弹响</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="阶段">
-                  <a-select v-model="queryParam.phase" placeholder="请选择">
-                    <a-select-option value="0">0-2周</a-select-option>
-                    <a-select-option value="1">3-6周</a-select-option>
-                    <a-select-option value="2">6-12周</a-select-option>
-                    <a-select-option value="3">12周以后</a-select-option>
+                <a-form-item label="是否轮播">
+                  <a-select v-model="queryParam.carousel" placeholder="请选择">
+                    <a-select-option value="1">是</a-select-option>
+                    <a-select-option value="0">否</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -92,7 +79,7 @@
       </div>
 
       <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建处方</a-button>
+        <a-button type="primary" icon="plus" @click="handleAdd">新建课程</a-button>
         <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1" @click="batchUpdate(1)">
@@ -127,11 +114,6 @@
         <span slot="serial" slot-scope="text, record, index">
           {{ index + 1 }}
         </span>
-        <span slot="prescription_type" slot-scope="text, record, index">
-          <a-icon v-if="text === 0" style="margin-right: 4px" type="file-text" />
-          <a-icon v-if="text === 1" style="margin-right: 4px" type="video-camera" />
-          <span>{{ text === 0 ? '文章' : '视频' }}</span>
-        </span>
         <span slot="status" slot-scope="text" style="font-weight: bold">
           <span class="text-item success" v-if="text === 1">
             <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
@@ -144,14 +126,32 @@
           <ellipsis :length="20" tooltip>{{ text }}</ellipsis>
         </span>
 
+        <span slot="is_discount" :style="{color: text ? '#FBAC33' : '#333'}" slot-scope="text">
+          {{ text ? '是' : '否' }}
+        </span>
+
+        <span slot="carousel" :style="{color: text ? '#59C337' : '#333'}" slot-scope="text">
+          {{ text ? '是' : '否' }}
+        </span>
+
+        <span slot="discount" :style="{color: record.is_discount ? '#FBAC33' : '#333'}" slot-scope="text, record">
+          {{ record.is_discount ? text : '' }}
+        </span>
+
+        <span slot="discount_validity" :style="{color: record.is_discount ? '#FBAC33' : '#333'}" slot-scope="text, record">
+          {{ record.is_discount ? moment(new Date(text), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') : '' }}
+        </span>
+
         <span slot="action" slot-scope="text, record">
           <template>
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
-            <a-popconfirm v-if="record.status === 0" title="确定发布上线改该处方吗？" ok-text="确定" cancel-text="取消" @confirm="handlePublish(record, 1)">
+            <a @click="handleCarousel(record, record.carousel ? 0 : 1)">{{ record.carousel ? '结束轮播' : '开始轮播' }}</a>
+            <a-divider type="vertical" />
+            <a-popconfirm v-if="record.status === 0" title="确定发布上线改该课程吗？" ok-text="确定" cancel-text="取消" @confirm="handlePublish(record, 1)">
               <a>快速发布</a>
             </a-popconfirm>
-            <a-popconfirm v-if="record.status === 1" title="确定发布上线改该处方吗？" ok-text="确定" cancel-text="取消" @confirm="handlePublish(record, 0)">
+            <a-popconfirm v-if="record.status === 1" title="确定发布上线改该课程吗？" ok-text="确定" cancel-text="取消" @confirm="handlePublish(record, 0)">
               <a>快速下线</a>
             </a-popconfirm>
           </template>
@@ -180,7 +180,7 @@ import StepByStepModal from "./modules/StepByStepModal";
 import CreateForm from "./modules/CreateForm";
 
 import { getAction, postAction, putAction, uploadAction } from "@/utils/manage";
-import {prescriptionApi} from "@/service/api";
+import {liveCourseApi} from "@/service/api";
 
 const columns = [
   {
@@ -188,109 +188,46 @@ const columns = [
     scopedSlots: { customRender: "serial" }
   },
   {
-    title: "处方标题",
+    title: "课程标题",
     dataIndex: "title"
   },
   {
-    title: "处方类型",
-    dataIndex: "prescription_type",
-    needTotal: true,
-    scopedSlots: { customRender: "prescription_type" }
-  },
-  {
-    title: "处方描述",
+    title: "课程描述",
     dataIndex: "description",
     scopedSlots: { customRender: "description" }
   },
   {
-    title: "观看人数",
-    dataIndex: "watch_num"
+    title: "直播次数",
+    dataIndex: "live_num"
   },
   {
-    title: "难度",
-    dataIndex: "difficulty"
+    title: "购买人数",
+    dataIndex: "frequency_num",
+    sorter: true
   },
   {
-    title: "处方时长",
-    dataIndex: "time_length"
+    title: "售价",
+    dataIndex: "price"
   },
   {
-    title: "关节部位",
-    dataIndex: "part",
-    customRender: (text) => {
-      switch (text) {
-        case 0: {
-          return "肩关节";
-        }
-        case 1: {
-          return "肘关节";
-        }
-        case 2: {
-          return "腕关节";
-        }
-        case 3: {
-          return "髋关节";
-        }
-        case 4: {
-          return "膝关节";
-        }
-        case 5: {
-          return "踝关节";
-        }
-        case 6: {
-          return "脊柱";
-        }
-        default: {
-          return "";
-        }
-      }
-    }
+    title: "是否折扣",
+    dataIndex: "is_discount",
+    scopedSlots: { customRender: "is_discount" }
   },
   {
-    title: "症状",
-    dataIndex: "symptoms",
-    customRender: (text) => {
-      switch (text) {
-        case 0: {
-          return "疼痛";
-        }
-        case 1: {
-          return "肿胀";
-        }
-        case 2: {
-          return "活动受限";
-        }
-        case 3: {
-          return "弹响";
-        }
-        default: {
-          return "";
-        }
-      }
-    }
+    title: "折扣价",
+    dataIndex: "discount",
+    scopedSlots: { customRender: "discount" }
   },
   {
-    title: "阶段",
-    dataIndex: "phase",
-    customRender: (text) => {
-      switch (text) {
-        case 0: {
-          return "0-2周";
-        }
-        case 1: {
-          return "3-6周";
-        }
-        case 2: {
-          return "6-12周";
-        }
-        case 3: {
-          return "12周以后";
-        }
-        default: {
-          return "";
-        }
-      }
-    }
+    title: "折扣有效期",
+    dataIndex: "discount_validity",
+    scopedSlots: { customRender: "discount_validity" }
+  },
+  {
+    title: "是否轮播",
+    dataIndex: "carousel",
+    scopedSlots: { customRender: "carousel" }
   },
   {
     title: "最近发布时间",
@@ -305,7 +242,7 @@ const columns = [
   {
     title: "操作",
     dataIndex: "action",
-    width: "150px",
+    width: "220px",
     scopedSlots: { customRender: "action" },
     fixed: 'right'
   }
@@ -334,6 +271,7 @@ export default {
     this.columns = columns;
     return {
       // create model
+      moment,
       totalNum: 0,
       visible: false,
       confirmLoading: false,
@@ -346,7 +284,7 @@ export default {
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam);
         console.log("loadData request parameters:", requestParameters);
-        return getAction(prescriptionApi.get,requestParameters)
+        return getAction(liveCourseApi.get,requestParameters)
           .then(res => {
             this.totalNum = res.data.totalCount
             return res.data;
@@ -409,15 +347,33 @@ export default {
       const formIn = {...record, status}
       this.handleUpdateForm(formIn)
     },
+    handleCarousel(record, status){
+      let that = this
+      const formIn = {...record, carousel: status}
+      this.$confirm({
+        title: '提示',
+        centered: true,
+        content: h => <span>确定对该课程{status ? '开始轮播' : '结束轮播'}吗？<br/><br/><span style="color: #096dd9">轮播规则：一个以上开启轮播；至少为三个，不够则从最新的课程补齐；最多为五个，若超过五个，则取最新的五个。</span></span>,
+        onOk() {
+          return new Promise((resolve, reject) => {
+            that.handleUpdateForm(formIn).then((response) => {
+              resolve(response);
+            }).catch(err => {
+              reject(err);
+            })
+          })
+        }
+      });
+    },
     batchUpdate(status){
       let that = this
       this.$confirm({
         title: '提示',
         centered: true,
-        content: `确定${status ? '发布' : '下线'}这些处方吗？`,
+        content: `确定${status ? '发布' : '下线'}这些课程吗？`,
         onOk() {
           return new Promise((resolve, reject) => {
-            putAction(prescriptionApi.batch, {
+            putAction(liveCourseApi.batch, {
               ids: that.selectedRowKeys.join(),
               status
             }).then((response) => {
@@ -435,7 +391,7 @@ export default {
     },
     handleCreateForm(formIn){
       const form = this.$refs.createModal.form;
-      postAction(prescriptionApi.create, formIn).then(res => {
+      postAction(liveCourseApi.create, formIn).then(res => {
         this.visible = false;
         this.confirmLoading = false;
         // 重置表单数据
@@ -452,23 +408,28 @@ export default {
     },
     handleUpdateForm(formIn){
       const form = this.$refs.createModal.form;
-      putAction(prescriptionApi.update, formIn).then(res => {
-        this.visible = false;
-        this.confirmLoading = false;
-        // 重置表单数据
-        form.resetFields();
-        // 刷新表格
-        this.$refs.table.refresh();
-        this.$refs.createModal.fileList = []
-        console.log('res', res)
-        this.$message.success(res.message || "更新成功");
-      }).catch(err1=>{
-        console.log('err1', err1)
-        console.log('err1.data', err1.data)
-        this.$message.error((err1.data && err1.data.message) || "更新失败");
-      }).finally(()=>{
-        this.confirmLoading = false;
+      return new Promise((resolve, reject) => {
+        putAction(liveCourseApi.update, formIn).then(res => {
+          this.visible = false;
+          this.confirmLoading = false;
+          // 重置表单数据
+          form.resetFields();
+          // 刷新表格
+          this.$refs.table.refresh();
+          this.$refs.createModal.fileList = []
+          console.log('res', res)
+          this.$message.success(res.message || "更新成功");
+          resolve(res)
+        }).catch(err1=>{
+          console.log('err1', err1)
+          console.log('err1.data', err1.data)
+          this.$message.error((err1.data && err1.data.message) || "更新失败");
+          reject(err1)
+        }).finally(()=>{
+          this.confirmLoading = false;
+        })
       })
+
     },
     handleOk() {
       const form = this.$refs.createModal.form;
@@ -478,22 +439,21 @@ export default {
           console.log("values", values);
           const formIn = {...values}
           Object.keys(formIn).map(key=>{
-            if (['prescription_type', 'difficulty', 'part', 'symptoms', 'phase', 'status'].includes(key)){
+            if (['course_type', 'live_num', 'frequency_num', 'is_discount', 'carousel', 'status'].includes(key)){
               formIn[key] = Number(formIn[key])
+            }
+            if (['price', 'discount'].includes(key)){
+              formIn[key] = formIn[key] ? String(formIn[key]) : null
             }
           })
           if (!values.id) {
             // 修改 e.g.
-            const formDataVideo = new FormData()
-            formDataVideo.append('file', this.$refs.createModal.form.getFieldValue('prescription_video').file)
             const formDataCover = new FormData()
             formDataCover.append('file', this.$refs.createModal.form.getFieldValue('cover').file)
             Promise.all([
-              uploadAction(prescriptionApi.uploadVideo, formDataVideo),
-              uploadAction(prescriptionApi.uploadCover, formDataCover)
+              uploadAction(liveCourseApi.uploadCover, formDataCover)
             ]).then(responses=>{
-              formIn.prescription_video = responses[0].data
-              formIn.cover = responses[1].data
+              formIn.cover = responses[0].data
               this.handleCreateForm(formIn)
             }).catch(err=>{
               this.$message.error((err.data && err.data.message) || "添加失败");
@@ -502,19 +462,15 @@ export default {
             })
           }else{
             console.log("formIn", formIn);
-            if (!this.$refs.createModal.fileList.length && !this.$refs.createModal.fileListImg.length){
+            if (!this.$refs.createModal.fileListImg.length){
               this.handleUpdateForm(formIn)
             }else{
-              const formDataVideo = new FormData()
-              formDataVideo.append('file', this.$refs.createModal.form.getFieldValue('prescription_video').file)
               const formDataCover = new FormData()
               formDataCover.append('file', this.$refs.createModal.form.getFieldValue('cover').file)
               Promise.all([
-                uploadAction(prescriptionApi.uploadVideo, formDataVideo),
-                uploadAction(prescriptionApi.uploadCover, formDataCover)
+                uploadAction(liveCourseApi.uploadCover, formDataCover)
               ]).then(responses=>{
-                formIn.prescription_video = responses[0].data
-                formIn.cover = responses[1].data
+                formIn.cover = responses[0].data
                 this.handleUpdateForm(formIn)
               }).catch(err=>{
                 this.$message.error((err.data && err.data.message) || "更新失败");

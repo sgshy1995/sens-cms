@@ -59,6 +59,29 @@ export const asyncRouterMap = [
           }
         ]
       },
+      {
+        path: '/store',
+        name: 'store',
+        component: RouteView,
+        redirect: '/store/live_course',
+        meta: { title: '商城管理', icon: 'shop', permission: ['store'] },
+        children: [
+          {
+            path: '/store/live_course',
+            name: 'LiveCourse',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/live_course/LiveCourse'),
+            meta: { title: '直播课程', keepAlive: true, permission: ['store'] }
+          },
+          {
+            path: '/store/video_course',
+            name: 'VideoCourse',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/video_course/VideoCourse'),
+            meta: { title: '视频课程', keepAlive: true, permission: ['store'] }
+          }
+        ]
+      },
       // forms
       {
         path: '/form',
