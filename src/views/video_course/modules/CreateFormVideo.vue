@@ -34,6 +34,9 @@
         <a-form-item label="视频描述">
           <a-textarea :rows="6" v-decorator="['description', {rules: [{required: true, min: 10, max: 800, message: '请输入至少10字符，最多800个字符'}]}]" placeholder="请输入视频描述" />
         </a-form-item>
+        <a-form-item label="视频时长">
+          <a-input v-decorator="['time_length', {rules: [{required: true, min: 1, message: '请输入视频时长，格式为X时X分X秒'}]}]" placeholder="请输入视频时长，如1时2分33秒" />
+        </a-form-item>
         <a-form-item label="视频排序">
           <a-input-number style="width: 100%" :precision="0" :min="0" :step="1" v-decorator="['sort', {rules: [{required: true, message: '请输入视频排序'}]}]" placeholder="请输入视频排序" />
           <div style="color: #096dd9;line-height: 1.5">排序规则：数字越<span style="color: #D14748">小</span>权重越<span style="color: #D14748">大</span>，排序越靠<span style="color: #D14748">前</span>；相同数字按照时间排序。最好保持不同的数字，一般数字和节数保持一致即可。</div>
@@ -57,7 +60,7 @@
 import pick from 'lodash.pick'
 
 // 表单字段
-const fields = ['id', 'title', 'description', 'status', 'source', 'cover', 'sort']
+const fields = ['id', 'title', 'description', 'status', 'source', 'cover', 'sort', 'time_length']
 
 export default {
   props: {

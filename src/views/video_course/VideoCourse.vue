@@ -379,6 +379,14 @@ const columnsVideo = [
     scopedSlots: { customRender: "description" }
   },
   {
+    title: "视频时长",
+    dataIndex: "time_length"
+  },
+  {
+    title: "视频排序",
+    dataIndex: "sort"
+  },
+  {
     title: "最近发布时间",
     dataIndex: "created_at",
     customRender: (text) => text ? moment(new Date(text), "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss") : ""
@@ -754,9 +762,9 @@ export default {
     },
     handleOk() {
       const form = this.$refs.createModal.form;
-      this.confirmLoading = true;
       form.validateFields((errors, values) => {
         if (!errors) {
+          this.confirmLoading = true;
           console.log("values", values);
           const formIn = { ...values };
           Object.keys(formIn).map(key => {
@@ -807,9 +815,9 @@ export default {
     },
     handleOkVideo() {
       const form = this.$refs.createModalVideo.form;
-      this.confirmLoadingVideo = true;
       form.validateFields((errors, values) => {
         if (!errors) {
+          this.confirmLoadingVideo = true;
           console.log("values", values);
           const formIn = { ...values };
           Object.keys(formIn).map(key => {
