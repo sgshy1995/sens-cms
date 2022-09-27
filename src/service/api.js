@@ -40,10 +40,30 @@ const courseInVideoApi = {
   batch: '/course_in_video/batch'
 };
 
+const equipmentApi = {
+  get: "/equipment/custom",
+  check: '/equipment/check',
+  create: '/equipment',
+  update: '/equipment',
+  uploadCover: '/equipment/upload/cover',
+  updateLong: '/equipment/upload/long_figure',
+  batch: '/equipment/batch'
+};
+
+const equipmentModelApi = {
+  get: "/equipment_model/custom",
+  create: '/equipment_model',
+  update: '/equipment_model',
+  uploadDataMultiFigure: '/equipment_model/upload/multi_figure',
+  batch: '/equipment_model/batch'
+};
+
 export {
   userApi,
   prescriptionApi,
   liveCourseApi,
   videoCourseApi,
-  courseInVideoApi
+  courseInVideoApi,
+  equipmentApi,
+  equipmentModelApi
 };
