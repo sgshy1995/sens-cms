@@ -70,6 +70,10 @@ export default {
       type: String | Boolean,
       default: 'auto'
     },
+    showRowSelection: {
+      type: Boolean,
+      default: true
+    },
     /**
      * enable page URI mode
      *
@@ -271,7 +275,7 @@ export default {
       return (
         <a-alert showIcon={true} style={{ marginBottom: "16px" }}>
           <template slot="message">
-            <span style="margin-right: 12px">已选择: <a style="font-weight: 600">{this.selectedRows.length}</a> 条数据</span>
+            { this.showRowSelection ? <span style="margin-right: 12px">已选择: <a style="font-weight: 600">{this.selectedRows.length}</a> 条数据</span> : null }
             {/*{needTotalItems}*/}
             { <span>总计 <span style="font-weight: bold">{this.totalNum}</span> 条数据</span> }
             {clearItem}
@@ -314,6 +318,9 @@ export default {
       this[k] && (props[k] = this[k])
       return props[k]
     })
+    if (!this.showRowSelection){
+      props.rowSelection = null
+    }
     const table = (
       <a-table {...{ props, scopedSlots: { ...this.$scopedSlots } }} onChange={this.loadData} onExpand={ (expanded, record) => { this.$emit('expand', expanded, record) } }>
         { Object.keys(this.$slots).map(name => (<template slot={name}>{this.$slots[name]}</template>)) }

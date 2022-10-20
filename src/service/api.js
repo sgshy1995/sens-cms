@@ -58,6 +58,16 @@ const equipmentModelApi = {
   batch: '/equipment_model/batch'
 };
 
+const equipmentOrderApi = {
+  get: "/equipment_order/custom",
+  shipment: '/equipment_order/shipment'
+};
+
+const courierApi = {
+  courier: '/courier/courier_info',
+  courier_company_list: '/courier/courier_company_list'
+}
+
 export {
   userApi,
   prescriptionApi,
@@ -65,5 +75,7 @@ export {
   videoCourseApi,
   courseInVideoApi,
   equipmentApi,
-  equipmentModelApi
+  equipmentModelApi,
+  equipmentOrderApi,
+  courierApi
 };

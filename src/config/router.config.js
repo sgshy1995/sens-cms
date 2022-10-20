@@ -86,6 +86,13 @@ export const asyncRouterMap = [
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/equipment/Equipment'),
             meta: { title: '器材管理', keepAlive: true, permission: ['store'] }
+          },
+          {
+            path: '/store/equipment_order',
+            name: 'EquipmentOrder',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/equipment_order/EquipmentOrder'),
+            meta: { title: '器材订单管理', keepAlive: true, permission: ['store'] }
           }
         ]
       },
