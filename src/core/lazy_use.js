@@ -45,6 +45,8 @@ import {
   Descriptions,
   Space,
   Timeline,
+  FormModel,
+  Empty,
   message,
   notification
 } from 'ant-design-vue'
@@ -101,6 +103,8 @@ Vue.use(Statistic)
 Vue.use(Descriptions)
 Vue.use(Space)
 Vue.use(Timeline)
+Vue.use(FormModel)
+Vue.use(Empty)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

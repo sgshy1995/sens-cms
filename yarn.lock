@@ -10167,6 +10167,11 @@ venn.js@~0.2.20:
     d3-transition "^1.0.1"
     fmin "0.0.2"
 
+viewerjs@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.npmmirror.com/viewerjs/-/viewerjs-1.11.0.tgz#eda25d96998356b4576fe25ef8d7cd6fd795a374"
+  integrity sha512-TE3XvfEXqKV+LdHsRdMSPsCaq0PfKDXm4SjGzfty7CzVxlDbBbT4x38vAqfXfNITmHhHUQefdxdg0Vv4ia+Z9w==
+
 viser-vue@^2.4.8:
   version "2.4.8"
   resolved "https://registry.npmmirror.com/viser-vue/-/viser-vue-2.4.8.tgz#3fdb058445cba59c1ccee9cc9c2024bec29926d4"

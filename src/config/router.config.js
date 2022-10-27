@@ -44,6 +44,29 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/users',
+        name: 'users',
+        component: RouteView,
+        redirect: '/users/user_list',
+        meta: { title: '用户管理', icon: 'user', permission: ['users'] },
+        children: [
+          {
+            path: '/users/user_list',
+            name: 'UserList',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/users/UserList'),
+            meta: { title: '用户信息', keepAlive: true, permission: ['users'] }
+          },
+          {
+            path: '/users/authenticate_list',
+            name: 'AuthenticateList',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/authenticate/AuthenticateList'),
+            meta: { title: '认证管理', keepAlive: true, permission: ['users'] }
+          }
+        ]
+      },
+      {
         path: '/recovery',
         name: 'recovery',
         component: RouteView,
