@@ -3,31 +3,32 @@
   <div id="userLayout" :class="['user-layout-wrapper', isMobile && 'mobile']">
     <div class="container">
       <div class="user-layout-lang">
-        <select-lang class="select-lang-trigger" />
+<!--        <select-lang class="select-lang-trigger" />-->
       </div>
       <div class="user-layout-content">
         <div class="top">
           <div class="header">
             <a href="/">
               <img src="~@/assets/logo.svg" class="logo" alt="logo">
-              <span class="title">Ant Design</span>
+              <img src="~@/assets/name.svg" class="name" alt="name">
             </a>
           </div>
           <div class="desc">
-            {{ $t('layouts.userLayout.title') }}
+            <img src="~@/assets/name-1.svg" class="name-1" alt="name">
+            <img src="~@/assets/name-2.svg" class="name-2" alt="name">
           </div>
         </div>
 
         <router-view />
 
         <div class="footer">
-          <div class="links">
+<!--          <div class="links">
             <a href="_self">帮助</a>
             <a href="_self">隐私</a>
             <a href="_self">条款</a>
-          </div>
+          </div>-->
           <div class="copyright">
-            Copyright &copy; 2018 vueComponent
+            Copyright &copy; 2024 北京赴康科技有限公司
           </div>
         </div>
       </div>
@@ -120,6 +121,11 @@ export default {
             border-style: none;
           }
 
+          .name {
+            width: 66px;
+            height: 33px;
+          }
+
           .title {
             font-size: 33px;
             color: rgba(0, 0, 0, .85);
@@ -130,10 +136,21 @@ export default {
           }
         }
         .desc {
-          font-size: 14px;
-          color: rgba(0, 0, 0, 0.45);
-          margin-top: 12px;
-          margin-bottom: 40px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin-top: 36px;
+          margin-bottom: 24px;
+
+          .name-1{
+            width: 144px;
+            height: 24px;
+          }
+          .name-2{
+            width: 286px;
+            height: 24px;
+          }
         }
       }
 

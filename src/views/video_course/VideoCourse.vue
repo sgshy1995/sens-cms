@@ -220,6 +220,10 @@
         </a-dropdown>
       </div>
 
+      <div class="table-show" v-if="showVideo">
+        <span>当前选择课程：<span>{{ course_name }}</span></span>
+      </div>
+
       <s-table
         ref="tableVideo"
         size="default"
@@ -513,7 +517,8 @@ export default {
       selectedRowKeysVideo: [],
       selectedRowsVideo: [],
       showVideo: false,
-      course_id: ""
+      course_id: "",
+      course_name: ""
     };
   },
   filters: {
@@ -547,6 +552,7 @@ export default {
     handleBack() {
       this.queryParamVideo = {};
       this.course_id = "";
+      this.course_name = "";
       this.showVideo = false;
       this.$nextTick(()=>{
         this.$refs.table.refresh(true);
@@ -583,6 +589,7 @@ export default {
     handleConfigVideo(record) {
       this.queryParam = {};
       this.course_id = record.id;
+      this.course_name = record.title;
       this.showVideo = true;
       this.$nextTick(()=>{
         this.$refs.tableVideo.refresh(true);
@@ -919,6 +926,31 @@ export default {
 
   &.fail .ant-badge-status-text {
     color: #F42132;
+  }
+}
+</style>
+
+<style lang="less" scoped>
+.table-show{
+  width: 100%;
+  height: 39px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background-color: #e7bbcd;
+  border: 1px solid #B2024A;
+  margin-bottom: 16px;
+  padding-left: 24px;
+
+  > span {
+    font-size: 14px;
+    color: #000;
+
+    > span {
+      color: #B2024A;
+      font-weight: bold;
+      padding-left: 6px;
+    }
   }
 }
 </style>

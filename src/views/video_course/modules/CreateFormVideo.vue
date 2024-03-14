@@ -97,6 +97,7 @@ export default {
       coverUrl: '',
       coverBlob: null,
       baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       id: ''
     }
   },
@@ -124,7 +125,7 @@ export default {
         this.$nextTick(()=>{
           const value = this.form.getFieldValue('cover')
           if(value && typeof value === 'string') {
-            this.coverUrl = this.baseUrl + this.form.getFieldValue('cover')
+            this.coverUrl = this.cdnUrl + this.form.getFieldValue('cover')
           }
           this.id = this.form.getFieldValue('id')
         })

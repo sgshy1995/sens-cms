@@ -144,6 +144,7 @@ export default {
       coverUrl: "",
       coverBlob: null,
       baseUrl: process.env.VUE_APP_API_BASE_URL + "/",
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       id: "",
       checkDiscount: false,
       provinces: [
@@ -179,7 +180,7 @@ export default {
           if (longText && typeof longText === "string") {
             this.fileListLong = longText.split(",").map((url,index) => {
               return {
-                url: this.baseUrl + url,
+                url: this.cdnUrl + url,
                 name: `long${index}.png`,
                 size: 80031,
                 type: "image/png",

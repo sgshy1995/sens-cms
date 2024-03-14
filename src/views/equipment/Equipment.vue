@@ -168,9 +168,9 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="视频标题">
+              <a-form-item label="型号标题">
                 <a-input @keypress.enter="$refs.tableModel.refresh(true)" v-model="queryParamVideo.title"
-                         placeholder="请输入课程标题模糊查询" />
+                         placeholder="请输入型号标题模糊查询" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -183,7 +183,7 @@
 
       <div class="table-operator">
         <a-button icon="left" @click="handleBack" style="margin-right: 24px">返回</a-button>
-        <a-button type="primary" icon="plus" @click="handleAddVideo">添加视频</a-button>
+        <a-button type="primary" icon="plus" @click="handleAddVideo">添加型号</a-button>
         <a-dropdown v-action:edit v-if="selectedRowKeysVideo.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1" @click="batchUpdateVideo(1)">
@@ -201,6 +201,10 @@
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
+      </div>
+
+      <div class="table-show" v-if="showVideo">
+        <span>当前选择器材：<span>{{ equipment_name }}</span></span>
       </div>
 
       <s-table
@@ -551,7 +555,8 @@ export default {
       selectedRowKeysVideo: [],
       selectedRowsVideo: [],
       showVideo: false,
-      equipment_id: ""
+      equipment_id: "",
+      equipment_name: ""
     };
   },
   filters: {
@@ -585,6 +590,7 @@ export default {
     handleBack() {
       this.queryParamVideo = {};
       this.equipment_id = "";
+      this.equipment_name = "";
       this.showVideo = false;
       this.$nextTick(() => {
         this.$refs.table.refresh(true);
@@ -621,6 +627,7 @@ export default {
     handleConfigVideo(record) {
       this.queryParam = {};
       this.equipment_id = record.id;
+      this.equipment_name = record.title;
       this.showVideo = true;
       this.$nextTick(() => {
         this.$refs.tableModel.refresh(true);
@@ -1007,6 +1014,31 @@ export default {
 
   &.fail .ant-badge-status-text {
     color: #F42132;
+  }
+}
+</style>
+
+<style lang="less" scoped>
+.table-show{
+  width: 100%;
+  height: 39px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background-color: #e7bbcd;
+  border: 1px solid #B2024A;
+  margin-bottom: 16px;
+  padding-left: 24px;
+
+  > span {
+    font-size: 14px;
+    color: #000;
+
+    > span {
+      color: #B2024A;
+      font-weight: bold;
+      padding-left: 6px;
+    }
   }
 }
 </style>

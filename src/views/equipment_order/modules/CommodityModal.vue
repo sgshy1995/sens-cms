@@ -79,7 +79,8 @@ export default {
       loading: false,
       info: {},
       dataSource: [],
-      baseUrl: process.env.VUE_APP_API_BASE_URL + "/"
+      baseUrl: process.env.VUE_APP_API_BASE_URL + "/",
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
     }
   },
   methods: {
@@ -95,10 +96,10 @@ export default {
       const equipment_type_map = ['康复训练器材', '康复理疗设备', '康复治疗师工具']
       data.equipment.map(equipment=>{
         equipment.equipment_type_show = equipment_type_map[equipment.equipment_type]
-        equipment.url = this.baseUrl + equipment.cover
+        equipment.url = this.cdnUrl + equipment.cover
         equipment.models.map(model => {
           console.log('model', model)
-          model.url = this.baseUrl + model.multi_figure.split(',')[0]
+          model.url = this.cdnUrl + model.multi_figure.split(',')[0]
         })
       })
       this.dataSource = [...data.equipment]

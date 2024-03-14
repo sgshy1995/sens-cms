@@ -144,11 +144,11 @@
         </span>
 
         <template slot="avatar" slot-scope="text">
-          <img style="width: 40px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="baseUrl + text" alt="avatar">
+          <img style="width: 40px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="cdnUrl + text" alt="avatar">
         </template>
 
         <template slot="background" slot-scope="text">
-          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="baseUrl + text" alt="background">
+          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="cdnUrl + text" alt="background">
         </template>
 
         <span slot="status" slot-scope="text" style="font-weight: bold">
@@ -322,6 +322,7 @@ export default {
     this.columns = columns;
     return {
       baseUrl: process.env.VUE_APP_API_BASE_URL + "/",
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       date: [],
       // create model
       totalNum: 0,

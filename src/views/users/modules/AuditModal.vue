@@ -61,25 +61,25 @@
           <a-row class="audit-modal-row" :gutter="24">
             <a-col class="audit-modal-col-left" span="4">身份证正面照:</a-col>
             <a-col class="audit-modal-col-right" span="20">
-              <img class="images-show-viewer-1" :src="baseUrl + model.identity_card_front" alt="identity_card_front" style="width: 200px">
+              <img class="images-show-viewer-1" :src="cdnUrl + model.identity_card_front" alt="identity_card_front" style="width: 200px">
             </a-col>
           </a-row>
           <a-row class="audit-modal-row" :gutter="24">
             <a-col class="audit-modal-col-left" span="4">身份证反面照:</a-col>
             <a-col class="audit-modal-col-right" span="20">
-              <img class="images-show-viewer-2" :src="baseUrl + model.identity_card_back" alt="identity_card_front" style="width: 200px">
+              <img class="images-show-viewer-2" :src="cdnUrl + model.identity_card_back" alt="identity_card_front" style="width: 200px">
             </a-col>
           </a-row>
           <a-row class="audit-modal-row" :gutter="24">
             <a-col class="audit-modal-col-left" span="4">执业证照:</a-col>
             <a-col class="audit-modal-col-right" span="20">
-              <img class="images-show-viewer-3" :src="baseUrl + model.practicing_certificate" alt="identity_card_front" style="width: 200px">
+              <img class="images-show-viewer-3" :src="cdnUrl + model.practicing_certificate" alt="identity_card_front" style="width: 200px">
             </a-col>
           </a-row>
           <a-row class="audit-modal-row" :gutter="24">
             <a-col class="audit-modal-col-left" span="4">工作证照:</a-col>
             <a-col class="audit-modal-col-right" span="20">
-              <img class="images-show-viewer-4" :src="baseUrl + model.employee_card" alt="identity_card_front" style="width: 200px">
+              <img class="images-show-viewer-4" :src="cdnUrl + model.employee_card" alt="identity_card_front" style="width: 200px">
             </a-col>
           </a-row>
         </div>
@@ -150,6 +150,7 @@ export default {
     return {
       moment,
       baseUrl: process.env.VUE_APP_API_BASE_URL + "/",
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       visible: false,
       loading: false,
       model: {

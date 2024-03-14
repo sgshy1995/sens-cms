@@ -21,11 +21,11 @@
           <a-input disabled v-decorator="['name']" placeholder="无" />
         </a-form-item>
         <a-form-item label="用户头像">
-          <img style="width: 200px;height: 200px;margin-bottom: 12px" v-if="model && model.avatar" :src="baseUrl + model.avatar" alt="avatar">
+          <img style="width: 200px;height: 200px;margin-bottom: 12px" v-if="model && model.avatar" :src="cdnUrl + model.avatar" alt="avatar">
           <a-input disabled v-decorator="['avatar']" placeholder="无" v-else />
         </a-form-item>
         <a-form-item label="用户背景图">
-          <img style="width: 500px;height: 300px;margin-bottom: 12px" v-if="model && model.background" :src="baseUrl + model.background" alt="background">
+          <img style="width: 500px;height: 300px;margin-bottom: 12px" v-if="model && model.background" :src="cdnUrl + model.background" alt="background">
           <a-input disabled v-decorator="['background']" placeholder="无" v-else />
         </a-form-item>
         <a-form-item label="用户性别">
@@ -122,6 +122,7 @@ export default {
       coverUrl: '',
       coverBlob: null,
       baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       id: '',
       modelIn: {}
     }

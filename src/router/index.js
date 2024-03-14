@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { constantRouterMap } from '@/config/router.config'
 
+const isProd = process.env.NODE_ENV === 'production'
+
 // hack router push callback
 const originalPush = Router.prototype.push
 Router.prototype.push = function push (location, onResolve, onReject) {
@@ -13,6 +15,7 @@ Vue.use(Router)
 
 const createRouter = () =>
   new Router({
+    base: isProd ? '/cms' : '',
     mode: 'history',
     routes: constantRouterMap
   })

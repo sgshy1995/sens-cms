@@ -118,6 +118,7 @@ export default {
       coverUrl: "",
       coverBlob: null,
       baseUrl: process.env.VUE_APP_API_BASE_URL + "/",
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       id: "",
       checkDiscount: false,
       checkLoading: false
@@ -148,13 +149,13 @@ export default {
         this.$nextTick(() => {
           const value = this.form.getFieldValue("cover");
           if (value && typeof value === "string") {
-            this.coverUrl = this.baseUrl + this.form.getFieldValue("cover");
+            this.coverUrl = this.cdnUrl + this.form.getFieldValue("cover");
           }
           const longText = this.form.getFieldValue("long_figure");
           if (longText && typeof longText === "string") {
             this.fileListLong = longText.split(",").map((url,index) => {
               return {
-                url: this.baseUrl + url,
+                url: this.cdnUrl + url,
                 name: `long${index}.png`,
                 size: 80031,
                 type: "image/png",

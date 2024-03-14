@@ -85,22 +85,22 @@
         </span>
 
         <template slot="identity_card_front" slot-scope="text">
-          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="baseUrl + text"
+          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="cdnUrl + text"
                alt="background">
         </template>
 
         <template slot="identity_card_back" slot-scope="text">
-          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="baseUrl + text"
+          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="cdnUrl + text"
                alt="background">
         </template>
 
         <template slot="practicing_certificate" slot-scope="text">
-          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="baseUrl + text"
+          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="cdnUrl + text"
                alt="background">
         </template>
 
         <template slot="employee_card" slot-scope="text">
-          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="baseUrl + text"
+          <img style="width: 60px;height: 40px;border-radius: 6px;cursor: pointer" v-if="text" :src="cdnUrl + text"
                alt="background">
         </template>
 
@@ -249,6 +249,7 @@ export default {
     this.columns = columns;
     return {
       baseUrl: process.env.VUE_APP_API_BASE_URL + "/",
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       date: [],
       // create model
       totalNum: 0,

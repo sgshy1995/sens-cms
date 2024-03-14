@@ -5,8 +5,8 @@
     :width="840"
     :visible="visible"
     :confirmLoading="loading"
-    @ok="() => { $emit('ok') }"
-    @cancel="() => { $emit('cancel') }"
+    @ok="handleOk"
+    @cancel="handleCancel"
   >
     <a-spin :spinning="loading">
       <a-form :form="form" v-bind="formLayout">
@@ -96,6 +96,7 @@
 
 <script>
 import pick from 'lodash.pick'
+import { Modal } from 'ant-design-vue';
 
 // 表单字段
 const fields = ['id', 'title', 'prescription_type', 'description', 'difficulty', 'time_length', 'part', 'symptoms', 'phase', 'status', 'prescription_video', 'cover']
@@ -135,6 +136,7 @@ export default {
       coverUrl: '',
       coverBlob: null,
       baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       id: ''
     }
   },
@@ -162,7 +164,7 @@ export default {
         this.$nextTick(()=>{
           const value = this.form.getFieldValue('cover')
           if(value && typeof value === 'string') {
-            this.coverUrl = this.baseUrl + this.form.getFieldValue('cover')
+            this.coverUrl = this.cdnUrl + this.form.getFieldValue('cover')
           }
           this.id = this.form.getFieldValue('id')
         })
@@ -171,6 +173,27 @@ export default {
     }
   },
   methods: {
+    handleOk(){
+      const that = this
+      this.$confirm({
+        title: '确定提交吗?',
+        content: h => <div style="color:red;">注意：处方视频上传没有人工或系统审核，请务必保证视频的合法合规性，以避免不必要的损失！</div>,
+        onOk() {
+          console.log('OK');
+          that.handleOkSubmit()
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+        class: 'test',
+      });
+    },
+    handleOkSubmit(){
+      this.$emit('ok')
+    },
+    handleCancel(){
+      this.$emit('cancel')
+    },
     handleRemove(file) {
       const index = this.fileList.indexOf(file);
       const newFileList = this.fileList.slice();
