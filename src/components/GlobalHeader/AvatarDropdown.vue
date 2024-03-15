@@ -1,7 +1,7 @@
 <template>
   <a-dropdown v-if="currentUser && currentUser.name" placement="bottomRight">
     <span class="ant-pro-account-avatar">
-      <a-avatar size="small" :src="currentUser.avatar ? baseUrl + currentUser.avatar : 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'" class="antd-pro-global-header-index-avatar" />
+      <a-avatar size="small" :src="currentUser.avatar ? cdnUrl + currentUser.avatar : 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'" class="antd-pro-global-header-index-avatar" />
       <span>{{ currentUser.name }}</span>
     </span>
     <template v-slot:overlay>
@@ -34,7 +34,8 @@ export default {
   name: 'AvatarDropdown',
   data(){
     return {
-      baseUrl: process.env.VUE_APP_API_BASE_URL + '/'
+      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
     }
   },
   props: {
