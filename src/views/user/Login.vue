@@ -175,7 +175,7 @@
         <a>
           <a-icon class="item-icon" type="weibo-circle"></a-icon>
         </a>
-        <router-link class="register" :to="{ name: 'register' }">{{ $t('user.login.signup') }}</router-link>
+<!--        <router-link class="register" :to="{ name: 'register' }">{{ $t('user.login.signup') }}</router-link>-->
       </div>
     </a-form>
 
