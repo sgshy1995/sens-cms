@@ -57,11 +57,11 @@
           <div style="color: #096dd9;line-height: 1.5">轮播规则：一个以上开启轮播；至少为三个，不够则从最新的课程补齐；最多为五个，若超过五个，则取最新的五个。</div>
         </a-form-item>
         <a-form-item label="器材长图">
-          <div style="color: #d6d6d6">支持常用图片格式，不要太大。最多9张图片。</div>
+          <div style="color: #d6d6d6">支持常用图片格式，不要太大。最多20张图片。</div>
           <a-upload list-type="picture-card"
                     v-decorator="['long_figure', {rules: [{required: true, message: '请上传器材长图'}]}]" accept="image/*"
                     :file-list="fileListLong" :remove="handleRemoveLong" :before-upload="beforeUploadLong">
-            <div v-if="fileListLong.length < 9">
+            <div v-if="fileListLong.length < 20">
               <a-icon type="plus" />
               <div class="ant-upload-text">
                 上传图片
