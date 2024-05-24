@@ -24,7 +24,18 @@ const prescriptionApi = {
   update: "/prescription",
   uploadVideo: "/prescription/upload/video",
   uploadCover: "/prescription/upload/cover",
-  batch: "/prescription/batch"
+  batch: "/prescription/batch",
+  batchChangeTag: "/prescription/batch_tag",
+  getOneById: (id) => `/prescription/id/${id}`,
+};
+
+const prescriptionTagApi = {
+  getAll: "/prescription_tag",
+  getCustom: "/prescription_tag/custom",
+  create: "/prescription_tag",
+  update: "/prescription_tag",
+  getOneById: (id) => `/prescription_tag/id/${id}`,
+  deleteOneById: (id) => `/prescription_tag/id/${id}`,
 };
 
 const liveCourseApi = {
@@ -83,6 +94,7 @@ const courierApi = {
 export {
   userApi,
   prescriptionApi,
+  prescriptionTagApi,
   liveCourseApi,
   videoCourseApi,
   courseInVideoApi,

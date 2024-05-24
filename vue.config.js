@@ -48,7 +48,7 @@ const vueConfig = {
   filenameHashing: true,
   // 是否使用包含运行时编译器的Vue核心的构建
   runtimeCompiler: false,
-  publicPath: isProd ? '/cms' : './',
+  publicPath: isProd ? '/cms' : '/',
   assetsDir: '',
   configureWebpack: {
     // webpack plugins
@@ -118,7 +118,7 @@ const vueConfig = {
 
   devServer: {
     // development server port 8000
-    port: 8000
+    port: 10099
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     // proxy: {
     //   '/api': {

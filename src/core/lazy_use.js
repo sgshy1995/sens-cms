@@ -48,7 +48,9 @@ import {
   FormModel,
   Empty,
   message,
-  notification
+  notification,
+  Tree,
+  Cascader
 } from 'ant-design-vue'
 //import Viser from 'viser-vue'
 
@@ -105,6 +107,8 @@ Vue.use(Space)
 Vue.use(Timeline)
 Vue.use(FormModel)
 Vue.use(Empty)
+Vue.use(Tree)
+Vue.use(Cascader)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
