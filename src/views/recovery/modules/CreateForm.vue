@@ -124,11 +124,11 @@ export default {
     return {
       loading: true,
       rules: {
-        title: [{required: true, min: 2, max: 12, message: '请输入2-14个字符的标题'}],
+        title: [{required: true, min: 1, max: 16, message: '请输入1-16个字符的标题'}],
         prescription_type: [{required: true, trigger: 'change', message: '请选择处方类型'}],
         prescription_video: [{required: true, message: '请上传处方视频'}],
         cover: [{required: false, message: '请上传处方视频'}],
-        description: [{required: true, min: 10, max: 800, message: '请输入至少10字符，最多800个字符'}],
+        description: [{required: true, min: 1, max: 800, message: '请输入至少1个字符，最多800个字符'}],
         gist: [{required: false, min: 0, max: 800, message: '请输入最多800个字符'}],
         difficulty: [{required: true, trigger: 'change', message: '请选择难度'}],
         time_length: [{required: true, min: 1, message: '请输入处方时长，格式为X时X分X秒'}],

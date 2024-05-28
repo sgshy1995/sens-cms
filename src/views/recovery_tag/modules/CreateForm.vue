@@ -84,7 +84,7 @@ export default {
     }
     return {
       rules: {
-        title: [{required: true, min: 2, max: 12, message: '请输入2-14个字符的标签名称'}],
+        title: [{required: true, min: 1, max: 14, message: '请输入1-14个字符的标签名称'}],
         parent_id: [{required: true, trigger: 'change', message: '请选择父级'}],
         priority: [{required: true, message: '请输入优先级'}],
         status: [{required: true, trigger: 'change', message: '请选择状态'}],
