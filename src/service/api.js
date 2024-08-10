@@ -46,6 +46,16 @@ const liveCourseApi = {
   batch: "/live_course/batch"
 };
 
+const offlineCourseApi = {
+  get: "/offline_course/custom",
+  create: "/offline_course",
+  update: "/offline_course",
+  uploadCover: "/offline_course/upload/cover",
+  uploadMultigraph: "/offline_course/upload/multigraph",
+  uploadCarouselCover: "/offline_course/upload/carousel_cover",
+  batch: "/offline_course/batch"
+};
+
 const videoCourseApi = {
   get: "/video_course/custom",
   create: "/video_course",
@@ -96,6 +106,7 @@ export {
   prescriptionApi,
   prescriptionTagApi,
   liveCourseApi,
+  offlineCourseApi,
   videoCourseApi,
   courseInVideoApi,
   equipmentApi,

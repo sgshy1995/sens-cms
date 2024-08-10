@@ -97,6 +97,13 @@ export const asyncRouterMap = [
         meta: { title: '商城管理', icon: 'shop', permission: ['store'] },
         children: [
           {
+            path: '/store/offline_course',
+            name: 'OfflineCourse',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/offline_course/OfflineCourse'),
+            meta: { title: '线下课程', keepAlive: true, permission: ['store'] }
+          },
+          {
             path: '/store/live_course',
             name: 'LiveCourse',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
