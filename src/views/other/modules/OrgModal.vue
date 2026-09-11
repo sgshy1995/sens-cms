@@ -1,29 +1,40 @@
 <template>
-  <a-modal
+  <a-drawer
+    placement="right"
+    :width="560"
     title="操作"
-    :width="600"
     :visible="visible"
-    :confirmLoading="confirmLoading"
-    @ok="handleOk"
-    @cancel="handleCancel"
+    :mask-closable="false"
+    :closable="true"
+    @close="handleCancel"
   >
-    <a-spin :spinning="confirmLoading">
-      <a-form :form="form">
+    <div class="drawer-wrap">
+      <div class="drawer-body">
+        <a-spin :spinning="confirmLoading">
+          <a-form :form="form">
 
-        <a-form-item
-          label="父级ID"
-        >
-          <a-input v-decorator="['parentId', {}]" disabled />
-        </a-form-item>
+            <a-form-item
+              label="父级ID"
+            >
+              <a-input v-decorator="['parentId', {}]" disabled />
+            </a-form-item>
 
-        <a-form-item
-          label="机构名称"
-        >
-          <a-input v-decorator="['orgName', {}]" />
-        </a-form-item>
-      </a-form>
-    </a-spin>
-  </a-modal>
+            <a-form-item
+              label="机构名称"
+            >
+              <a-input v-decorator="['orgName', {}]" />
+            </a-form-item>
+          </a-form>
+        </a-spin>
+      </div>
+
+      <div class="drawer-footer">
+        <a-button @click="handleCancel">取消</a-button>
+        <a-button type="primary" :loading="confirmLoading" @click="handleOk">确定</a-button>
+      </div>
+    </div>
+
+  </a-drawer>
 </template>
 
 <script>

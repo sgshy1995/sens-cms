@@ -93,3 +93,13 @@ export function scorePassword (pass) {
 
   return parseInt(score)
 }
+
+export function resolveFileUrl (filePath) {
+  if (!filePath) return ''
+  if (/^https?:\/\//.test(filePath) || filePath.startsWith('data:')) return filePath
+  const normalized = filePath.startsWith('/') ? filePath : '/' + filePath
+  const base = normalized.startsWith('/cdn/')
+    ? (process.env.VUE_APP_CDN_BASE_URL || '').replace(/\/$/, '')
+    : (process.env.VUE_APP_API_BASE_URL || '').replace(/\/$/, '')
+  return base + normalized
+}

@@ -1,24 +1,35 @@
 <template>
-  <a-modal
+  <a-drawer
+    placement="right"
+    :width="560"
     title="新建规则"
-    :width="640"
     :visible="visible"
-    :confirmLoading="loading"
-    @ok="() => { $emit('ok') }"
-    @cancel="() => { $emit('cancel') }"
+    :mask-closable="false"
+    :closable="true"
+    @close="() => { $emit('cancel') }"
   >
-    <a-spin :spinning="loading">
-      <a-form :form="form" v-bind="formLayout">
-        <!-- 检查是否有 id 并且大于0，大于0是修改。其他是新增，新增不显示主键ID -->
-        <a-form-item v-show="model && model.id > 0" label="主键ID">
-          <a-input v-decorator="['id', { initialValue: 0 }]" disabled />
-        </a-form-item>
-        <a-form-item label="描述">
-          <a-input v-decorator="['description', {rules: [{required: true, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
-        </a-form-item>
-      </a-form>
-    </a-spin>
-  </a-modal>
+    <div class="drawer-wrap">
+      <div class="drawer-body">
+        <a-spin :spinning="loading">
+          <a-form :form="form" v-bind="formLayout">
+            <!-- 检查是否有 id 并且大于0，大于0是修改。其他是新增，新增不显示主键ID -->
+            <a-form-item v-show="model && model.id > 0" label="主键ID">
+              <a-input v-decorator="['id', { initialValue: 0 }]" disabled />
+            </a-form-item>
+            <a-form-item label="描述">
+              <a-input v-decorator="['description', {rules: [{required: true, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+            </a-form-item>
+          </a-form>
+        </a-spin>
+      </div>
+
+      <div class="drawer-footer">
+        <a-button @click="() => { $emit('cancel') }">取消</a-button>
+        <a-button type="primary" :loading="loading" @click="() => { $emit('ok') }">确定</a-button>
+      </div>
+    </div>
+
+  </a-drawer>
 </template>
 
 <script>

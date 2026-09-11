@@ -59,76 +59,91 @@
       </span>
     </s-table>
 
-    <a-modal
+    <a-drawer
+      placement="right"
+      :width="720"
       title="操作"
-      :width="800"
-      v-model="visible"
-      @ok="handleOk"
+      :visible="visible"
+      :mask-closable="false"
+      :closable="true"
+      @close="handleClose"
     >
-      <a-form :autoFormCreate="(form)=>{this.form = form}">
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="唯一识别码"
-          hasFeedback
-          validateStatus="success"
-        >
-          <a-input placeholder="唯一识别码" v-model="mdl.id" id="no" disabled="disabled" />
-        </a-form-item>
+      <div class="drawer-wrap">
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="权限名称"
-          hasFeedback
-          validateStatus="success"
-        >
-          <a-input placeholder="起一个名字" v-model="mdl.name" id="permission_name" />
-        </a-form-item>
+        <div class="drawer-body">
+          <a-form :autoFormCreate="(form)=>{this.form = form}">
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="状态"
-          hasFeedback
-          validateStatus="warning"
-        >
-          <a-select v-model="mdl.status">
-            <a-select-option value="1">正常</a-select-option>
-            <a-select-option value="2">禁用</a-select-option>
-          </a-select>
-        </a-form-item>
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="唯一识别码"
+              hasFeedback
+              validateStatus="success"
+            >
+              <a-input placeholder="唯一识别码" v-model="mdl.id" id="no" disabled="disabled" />
+            </a-form-item>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="描述"
-          hasFeedback
-        >
-          <a-textarea :rows="5" v-model="mdl.describe" placeholder="..." id="describe"/>
-        </a-form-item>
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="权限名称"
+              hasFeedback
+              validateStatus="success"
+            >
+              <a-input placeholder="起一个名字" v-model="mdl.name" id="permission_name" />
+            </a-form-item>
 
-        <a-divider />
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="状态"
+              hasFeedback
+              validateStatus="warning"
+            >
+              <a-select v-model="mdl.status">
+                <a-select-option value="1">正常</a-select-option>
+                <a-select-option value="2">禁用</a-select-option>
+              </a-select>
+            </a-form-item>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="赋予权限"
-          hasFeedback
-        >
-          <a-select
-            style="width: 100%"
-            mode="multiple"
-            v-model="mdl.actions"
-            :allowClear="true"
-          >
-            <a-select-option v-for="(action, index) in permissionList" :key="index" :value="action.value">{{ action.label }}</a-select-option>
-          </a-select>
-        </a-form-item>
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="描述"
+              hasFeedback
+            >
+              <a-textarea :rows="5" v-model="mdl.describe" placeholder="..." id="describe"/>
+            </a-form-item>
 
-      </a-form>
-    </a-modal>
+            <a-divider />
+
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="赋予权限"
+              hasFeedback
+            >
+              <a-select
+                style="width: 100%"
+                mode="multiple"
+                v-model="mdl.actions"
+                :allowClear="true"
+              >
+                <a-select-option v-for="(action, index) in permissionList" :key="index" :value="action.value">{{ action.label }}</a-select-option>
+              </a-select>
+            </a-form-item>
+
+          </a-form>
+        </div>
+
+        <div class="drawer-footer">
+          <a-button @click="handleClose">取消</a-button>
+          <a-button type="primary" @click="handleOk">确定</a-button>
+        </div>
+      </div>
+
+    </a-drawer>
 
   </a-card>
 </template>
@@ -245,6 +260,9 @@ export default {
     },
     handleOk () {
 
+    },
+    handleClose () {
+      this.visible = false
     },
     onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys

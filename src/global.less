@@ -95,3 +95,48 @@ ol {
     }
   }
 }
+
+// 右侧抽屉通用样式：内容独立滚动、底部操作按钮固定（结构隔离，避免内容透过按钮行）
+.ant-drawer-wrapper-body {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ant-drawer-wrapper-body .ant-drawer-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ant-drawer-wrapper-body .ant-drawer-body:has(.drawer-wrap) {
+  padding: 0;
+}
+
+.drawer-wrap {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.drawer-body {
+  flex: 1;
+  min-height: 0;
+  padding: 24px;
+  overflow: auto;
+}
+
+.drawer-footer {
+  flex-shrink: 0;
+  padding: 12px 24px;
+  text-align: right;
+  background: #fff;
+  border-top: 1px solid #e8e8e8;
+  // stylelint-disable-next-line color-function-notation, alpha-value-notation, number-leading-zero
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+
+  button + button {
+    margin-left: 8px;
+  }
+}

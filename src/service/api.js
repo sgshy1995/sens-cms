@@ -1,105 +1,120 @@
 const userApi = {
-  login: "/user/admin/login",
-  capture: "/auth/admin/capture",
-  phoneCapture: "/auth/admin/capture_phone",
-  logout: "/user/logout",
-  getInfo: "/user"
-};
-
+  login: '/user/admin/login',
+  capture: '/auth/admin/capture',
+  phoneCapture: '/auth/admin/capture_phone',
+  logout: '/user/logout',
+  getInfo: '/user'
+}
 
 const usersApi = {
-  get: "/user/custom",
-  updateIfLectureAuth: "/user/if_lecture_auth"
-};
+  get: '/user/custom',
+  updateIfLectureAuth: '/user/if_lecture_auth'
+}
 
 const authenticatesApi = {
-  get: "/authenticate/custom",
+  get: '/authenticate/custom',
   getOneById: (id) => `/authenticate/id/${id}`,
   audit: '/authenticate/audit'
-};
+}
 
 const prescriptionApi = {
-  get: "/prescription/custom",
-  create: "/prescription",
-  update: "/prescription",
-  uploadVideo: "/prescription/upload/video",
-  uploadCover: "/prescription/upload/cover",
-  batch: "/prescription/batch",
-  batchChangeTag: "/prescription/batch_tag",
-  getOneById: (id) => `/prescription/id/${id}`,
-};
+  get: '/prescription/custom',
+  create: '/prescription',
+  update: '/prescription',
+  uploadVideo: '/prescription/upload/video',
+  uploadCover: '/prescription/upload/cover',
+  batch: '/prescription/batch',
+  batchChangeTag: '/prescription/batch_tag',
+  getOneById: (id) => `/prescription/id/${id}`
+}
 
 const prescriptionTagApi = {
-  getAll: "/prescription_tag",
-  getCustom: "/prescription_tag/custom",
-  create: "/prescription_tag",
-  update: "/prescription_tag",
+  getAll: '/prescription_tag',
+  getCustom: '/prescription_tag/custom',
+  create: '/prescription_tag',
+  update: '/prescription_tag',
   getOneById: (id) => `/prescription_tag/id/${id}`,
-  deleteOneById: (id) => `/prescription_tag/id/${id}`,
-};
+  deleteOneById: (id) => `/prescription_tag/id/${id}`
+}
 
 const liveCourseApi = {
-  get: "/live_course/custom",
-  create: "/live_course",
-  update: "/live_course",
-  uploadCover: "/live_course/upload/cover",
-  batch: "/live_course/batch"
-};
+  get: '/live_course/custom',
+  create: '/live_course',
+  update: '/live_course',
+  uploadCover: '/live_course/upload/cover',
+  batch: '/live_course/batch'
+}
 
 const offlineCourseApi = {
-  get: "/offline_course/custom",
-  create: "/offline_course",
-  update: "/offline_course",
-  uploadCover: "/offline_course/upload/cover",
-  uploadMultigraph: "/offline_course/upload/multigraph",
-  uploadCarouselCover: "/offline_course/upload/carousel_cover",
-  batch: "/offline_course/batch"
-};
+  get: '/offline_course/custom',
+  create: '/offline_course',
+  update: '/offline_course',
+  uploadCover: '/offline_course/upload/cover',
+  uploadMultigraph: '/offline_course/upload/multigraph',
+  uploadCarouselCover: '/offline_course/upload/carousel_cover',
+  batch: '/offline_course/batch'
+}
 
 const videoCourseApi = {
-  get: "/video_course/custom",
-  create: "/video_course",
-  update: "/video_course",
-  uploadCover: "/video_course/upload/cover",
-  batch: "/video_course/batch"
-};
+  get: '/video_course/custom',
+  create: '/video_course',
+  update: '/video_course',
+  uploadCover: '/video_course/upload/cover',
+  batch: '/video_course/batch'
+}
 
 const courseInVideoApi = {
-  get: "/course_in_video/custom",
-  create: "/course_in_video",
-  update: "/course_in_video",
-  uploadVideo: "/course_in_video/upload/video",
-  uploadCover: "/course_in_video/upload/cover",
-  batch: "/course_in_video/batch"
-};
+  get: '/course_in_video/custom',
+  create: '/course_in_video',
+  update: '/course_in_video',
+  uploadVideo: '/course_in_video/upload/video',
+  uploadCover: '/course_in_video/upload/cover',
+  batch: '/course_in_video/batch'
+}
 
 const equipmentApi = {
-  get: "/equipment/custom",
-  check: "/equipment/check",
-  create: "/equipment",
-  update: "/equipment",
-  uploadCover: "/equipment/upload/cover",
-  updateLong: "/equipment/upload/long_figure",
-  batch: "/equipment/batch"
-};
+  get: '/equipment/custom',
+  check: '/equipment/check',
+  create: '/equipment',
+  update: '/equipment',
+  uploadCover: '/equipment/upload/cover',
+  updateLong: '/equipment/upload/long_figure',
+  batch: '/equipment/batch'
+}
 
 const equipmentModelApi = {
-  get: "/equipment_model/custom",
-  create: "/equipment_model",
-  update: "/equipment_model",
-  uploadDataMultiFigure: "/equipment_model/upload/multi_figure",
-  batch: "/equipment_model/batch"
-};
+  get: '/equipment_model/custom',
+  create: '/equipment_model',
+  update: '/equipment_model',
+  uploadDataMultiFigure: '/equipment_model/upload/multi_figure',
+  batch: '/equipment_model/batch'
+}
 
 const equipmentOrderApi = {
-  get: "/equipment_order/custom",
-  shipment: "/equipment_order/shipment"
-};
+  get: '/equipment_order/custom',
+  shipment: '/equipment_order/shipment'
+}
 
 const courierApi = {
-  courier: "/courier/courier_info",
-  courier_company_list: "/courier/courier_company_list"
-};
+  courier: '/courier/courier_info',
+  courier_company_list: '/courier/courier_company_list'
+}
+
+const forumArticleApi = {
+  get: '/forum_article/custom',
+  create: '/forum_article',
+  update: (id) => `/forum_article/${id}`,
+  deleteOneById: (id) => `/forum_article/${id}`,
+  audit: (id) => `/forum_article/audit/${id}`,
+  mark: (id) => `/forum_article/mark/${id}`,
+  getOneById: (id) => `/forum_article/id/${id}`,
+  uploadCover: '/forum_article/upload/cover'
+}
+
+const forumCommentApi = {
+  getByArticle: (articleId) => `/forum_comment/article/${articleId}`,
+  deleteOneById: (id) => `/forum_comment/${id}`
+}
 
 export {
   userApi,
@@ -114,5 +129,7 @@ export {
   equipmentOrderApi,
   courierApi,
   usersApi,
-  authenticatesApi
-};
+  authenticatesApi,
+  forumArticleApi,
+  forumCommentApi
+}

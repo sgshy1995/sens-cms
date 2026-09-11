@@ -1,6 +1,5 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
-import { bxAnaalyse } from '@/core/icons'
 
 const RouteView = {
   name: 'RouteView',
@@ -133,6 +132,36 @@ export const asyncRouterMap = [
           }
         ]
       },
+      {
+        path: '/forum',
+        name: 'forum',
+        component: RouteView,
+        redirect: '/forum/article_list',
+        meta: { title: '论坛管理', icon: 'message', permission: ['forum'] },
+        children: [
+          {
+            path: '/forum/article_list',
+            name: 'ForumArticleList',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/forum/ArticleList'),
+            meta: { title: '文章管理', keepAlive: true, permission: ['forum'] }
+          },
+          {
+            path: '/forum/article_audit',
+            name: 'ForumArticleAudit',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/forum/ArticleAudit'),
+            meta: { title: '文章审核', keepAlive: true, permission: ['forum'] }
+          },
+          {
+            path: '/forum/comment_manage',
+            name: 'ForumCommentManage',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/forum/CommentManage'),
+            meta: { title: '评论管理', keepAlive: true, permission: ['forum'] }
+          }
+        ]
+      }
       // forms
       // {
       //   path: '/form',
@@ -446,11 +475,11 @@ export const constantRouterMap = [
         name: 'login',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
       },
-      /*{
+      /* {
         path: 'register',
         name: 'register',
         component: () => import(/!* webpackChunkName: "user" *!/ '@/views/user/Register')
-      },*/
+      }, */
       {
         path: 'register-result',
         name: 'registerResult',

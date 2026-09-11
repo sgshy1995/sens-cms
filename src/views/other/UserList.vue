@@ -77,86 +77,100 @@
       </span>
     </s-table>
 
-    <a-modal
+    <a-drawer
+      placement="right"
+      :width="720"
       title="操作"
-      style="top: 20px;"
-      :width="800"
-      v-model="visible"
-      @ok="handleOk"
+      :visible="visible"
+      :mask-closable="false"
+      :closable="true"
+      @close="handleClose"
     >
-      <a-form class="permission-form" :form="form">
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="唯一识别码"
-          hasFeedback
-          validateStatus="success"
-        >
-          <a-input
-            placeholder="唯一识别码"
-            disabled="disabled"
-            v-decorator="['id']"
-          />
-        </a-form-item>
+      <div class="drawer-wrap">
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="角色名称"
-          hasFeedback
-          validateStatus="success"
-        >
-          <a-input
-            placeholder="起一个名字"
-            v-decorator="['name']"
-          />
-        </a-form-item>
+        <div class="drawer-body">
+          <a-form class="permission-form" :form="form">
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="状态"
-          hasFeedback
-          validateStatus="warning"
-        >
-          <a-select v-decorator="['status', { initialValue: 1 }]">
-            <a-select-option :value="1">正常</a-select-option>
-            <a-select-option :value="2">禁用</a-select-option>
-          </a-select>
-        </a-form-item>
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="唯一识别码"
+              hasFeedback
+              validateStatus="success"
+            >
+              <a-input
+                placeholder="唯一识别码"
+                disabled="disabled"
+                v-decorator="['id']"
+              />
+            </a-form-item>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="描述"
-          hasFeedback
-        >
-          <a-textarea
-            :rows="5"
-            placeholder="..."
-            id="describe"
-            v-decorator="['describe']"
-          />
-        </a-form-item>
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="角色名称"
+              hasFeedback
+              validateStatus="success"
+            >
+              <a-input
+                placeholder="起一个名字"
+                v-decorator="['name']"
+              />
+            </a-form-item>
 
-        <a-divider>拥有权限</a-divider>
-        <template v-for="permission in permissions">
-          <a-form-item
-            class="permission-group"
-            v-if="permission.actionsOptions && permission.actionsOptions.length > 0"
-            :labelCol="labelCol"
-            :wrapperCol="wrapperCol"
-            :key="permission.permissionId"
-            :label="permission.permissionName"
-          >
-            <a-checkbox>全选</a-checkbox>
-            <a-checkbox-group v-decorator="[`permissions.${permission.permissionId}`]" :options="permission.actionsOptions"/>
-          </a-form-item>
-        </template>
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="状态"
+              hasFeedback
+              validateStatus="warning"
+            >
+              <a-select v-decorator="['status', { initialValue: 1 }]">
+                <a-select-option :value="1">正常</a-select-option>
+                <a-select-option :value="2">禁用</a-select-option>
+              </a-select>
+            </a-form-item>
 
-      </a-form>
-    </a-modal>
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="描述"
+              hasFeedback
+            >
+              <a-textarea
+                :rows="5"
+                placeholder="..."
+                id="describe"
+                v-decorator="['describe']"
+              />
+            </a-form-item>
+
+            <a-divider>拥有权限</a-divider>
+            <template v-for="permission in permissions">
+              <a-form-item
+                class="permission-group"
+                v-if="permission.actionsOptions && permission.actionsOptions.length > 0"
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
+                :key="permission.permissionId"
+                :label="permission.permissionName"
+              >
+                <a-checkbox>全选</a-checkbox>
+                <a-checkbox-group v-decorator="[`permissions.${permission.permissionId}`]" :options="permission.actionsOptions"/>
+              </a-form-item>
+            </template>
+
+          </a-form>
+        </div>
+
+        <div class="drawer-footer">
+          <a-button @click="handleClose">取消</a-button>
+          <a-button type="primary" @click="handleOk">确定</a-button>
+        </div>
+      </div>
+
+    </a-drawer>
 
   </a-card>
 </template>
@@ -295,6 +309,9 @@ export default {
       this.form.validateFields((err, values) => {
         console.log(err, values)
       })
+    },
+    handleClose () {
+      this.visible = false
     },
     onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys

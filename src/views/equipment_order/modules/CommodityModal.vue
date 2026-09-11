@@ -1,59 +1,59 @@
 <template>
-    <a-modal
-      :maskClosable="true"
-      title="商品清单"
-      :width="840"
-      :visible="visible"
-      :confirmLoading="loading"
-      @ok="handleClose"
-      @cancel="handleClose"
-    >
-      <div slot="footer">
-        <a-button type="primary" @click="handleClose">确定</a-button>
-      </div>
-      <a-spin :spinning="loading">
-        <div class="commodity-modal">
-          <div class="commodity-modal-title">
-            <div class="commodity-modal-title-in">下单用户: <span>{{ info.username }}</span></div>
-            <div class="commodity-modal-title-in">姓名: <span>{{ info.name }}</span></div>
-            <div class="commodity-modal-title-in">订单号: <span>{{ info.order_no }}</span></div>
-            <div class="commodity-modal-title-in">支付流水号: <span>{{ info.payment_no }}</span></div>
-            <div class="commodity-modal-title-in">购买器材种类数: <span>{{ info.order_total }}</span></div>
-            <div class="commodity-modal-title-in">购买总数量: <span>{{ info.order_total_num }}</span></div>
-            <div class="commodity-modal-title-in">支付金额/元: <span>¥ {{ info.payment_num }}</span></div>
-          </div>
-          <div class="commodity-modal-body">
-            <div class="commodity-modal-item" v-for="(u, index) in dataSource" :key="index">
-              <div class="chart-right-content">
-                <div class="body-item-top">
-                  <div class="body-item-top-left">
-                    <img class="body-item-top-left-img" :src="u.url" alt="cover" />
-                  </div>
-                  <div class="body-item-top-right">
-                    <div class="body-item-top-right-title">{{ u.title }}</div>
-                    <div class="body-item-top-right-tag">
-                    <span class="item-right-tag-in" >
-                      <span class="tag-in-text">{{ u.equipment_type_show }}</span>
-                    </span>
+  <a-drawer
+    placement="right"
+    :width="720"
+    title="商品清单"
+    :visible="visible"
+    :mask-closable="false"
+    :closable="true"
+    @close="handleClose"
+  >
+    <div class="drawer-wrap">
+      <div class="drawer-body">
+        <a-spin :spinning="loading">
+          <div class="commodity-modal">
+            <div class="commodity-modal-title">
+              <div class="commodity-modal-title-in">下单用户: <span>{{ info.username }}</span></div>
+              <div class="commodity-modal-title-in">姓名: <span>{{ info.name }}</span></div>
+              <div class="commodity-modal-title-in">订单号: <span>{{ info.order_no }}</span></div>
+              <div class="commodity-modal-title-in">支付流水号: <span>{{ info.payment_no }}</span></div>
+              <div class="commodity-modal-title-in">购买器材种类数: <span>{{ info.order_total }}</span></div>
+              <div class="commodity-modal-title-in">购买总数量: <span>{{ info.order_total_num }}</span></div>
+              <div class="commodity-modal-title-in">支付金额/元: <span>¥ {{ info.payment_num }}</span></div>
+            </div>
+            <div class="commodity-modal-body">
+              <div class="commodity-modal-item" v-for="(u, index) in dataSource" :key="index">
+                <div class="chart-right-content">
+                  <div class="body-item-top">
+                    <div class="body-item-top-left">
+                      <img class="body-item-top-left-img" :src="u.url" alt="cover" />
                     </div>
-                    <div class="body-item-top-right-description">{{ u.description }}</div>
-                  </div>
-                </div>
-                <div class="body-item-bottom">
-                  <div class="body-item-bottom-title">已购买型号</div>
-                  <div class="body-item-bottom-body">
-                    <div class="body-item-bottom-body-item" v-for="(u1, index1) in u.models" :key="u1.id">
-                      <div class="body-model-left">
-                        <img alt="cover" class="body-model-left-img" :src="u1.url" />
+                    <div class="body-item-top-right">
+                      <div class="body-item-top-right-title">{{ u.title }}</div>
+                      <div class="body-item-top-right-tag">
+                        <span class="item-right-tag-in" >
+                          <span class="tag-in-text">{{ u.equipment_type_show }}</span>
+                        </span>
                       </div>
-                      <div class="body-model-right">
-                        <div class="body-model-right-title">{{ u1.title }}</div>
-                        <div class="body-model-right-description">{{ u1.description }}</div>
-                        <div class="body-model-right-price">
-                          <span class="body-model-right-price-in">¥ {{ u1.price }}</span>
+                      <div class="body-item-top-right-description">{{ u.description }}</div>
+                    </div>
+                  </div>
+                  <div class="body-item-bottom">
+                    <div class="body-item-bottom-title">已购买型号</div>
+                    <div class="body-item-bottom-body">
+                      <div class="body-item-bottom-body-item" v-for="(u1, index1) in u.models" :key="u1.id">
+                        <div class="body-model-left">
+                          <img alt="cover" class="body-model-left-img" :src="u1.url" />
                         </div>
-                        <div class="body-model-right-num">
-                          ×{{ u1.add_num }}
+                        <div class="body-model-right">
+                          <div class="body-model-right-title">{{ u1.title }}</div>
+                          <div class="body-model-right-description">{{ u1.description }}</div>
+                          <div class="body-model-right-price">
+                            <span class="body-model-right-price-in">¥ {{ u1.price }}</span>
+                          </div>
+                          <div class="body-model-right-num">
+                            ×{{ u1.add_num }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -61,32 +61,38 @@
                 </div>
               </div>
             </div>
-          </div>
 
-        </div>
-      </a-spin>
-    </a-modal>
+          </div>
+        </a-spin>
+      </div>
+
+      <div class="drawer-footer">
+        <a-button type="primary" @click="handleClose">确定</a-button>
+      </div>
+    </div>
+
+  </a-drawer>
 </template>
 
 <script>
-import moment from "moment";
+import moment from 'moment'
 
 export default {
-  name: "CommodityModel",
-  data(){
+  name: 'CommodityModel',
+  data () {
     return {
       visible: false,
       loading: false,
       info: {},
       dataSource: [],
-      baseUrl: process.env.VUE_APP_API_BASE_URL + "/",
-      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
+      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
+      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/'
     }
   },
   methods: {
-    show(info){
+    show (info) {
       this.visible = true
-      const data = {...info}
+      const data = { ...info }
       const status_map = ['取消/关闭', '待支付', '待发货', '已发货', '已收货', '退货中', '已退货']
       data.status_show = status_map[data.status]
       data.order_time_show = moment(data.order_time, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
@@ -94,7 +100,7 @@ export default {
       const payment_typ_map = ['余额支付', '微信支付', '支付宝支付', 'Apple支付']
       data.payment_type_show = payment_typ_map[data.payment_type]
       const equipment_type_map = ['康复训练器材', '康复理疗设备', '康复治疗师工具']
-      data.equipment.map(equipment=>{
+      data.equipment.map(equipment => {
         equipment.equipment_type_show = equipment_type_map[equipment.equipment_type]
         equipment.url = this.cdnUrl + equipment.cover
         equipment.models.map(model => {
@@ -103,15 +109,15 @@ export default {
         })
       })
       this.dataSource = [...data.equipment]
-      this.info = {...data}
+      this.info = { ...data }
     },
-    handleClose(){
+    handleClose () {
       this.visible = false
       this.info = {}
       this.dataSource = []
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">

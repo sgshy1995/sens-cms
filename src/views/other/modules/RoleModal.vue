@@ -1,24 +1,35 @@
 <template>
-  <a-modal
+  <a-drawer
+    placement="right"
+    :width="720"
     title="操作"
-    :width="800"
     :visible="visible"
-    :confirmLoading="confirmLoading"
-    @ok="handleOk"
-    @cancel="handleCancel"
+    :mask-closable="false"
+    :closable="true"
+    @close="handleCancel"
   >
-    <a-steps :current="1">
-      <a-step>
-        <!-- <span slot="title">Finished</span> -->
-        <template slot="title">
-          Finished
-        </template>
-        <span slot="description">This is a description.</span>
-      </a-step>
-      <a-step title="In Progress" description="This is a description." />
-      <a-step title="Waiting" description="This is a description." />
-    </a-steps>
-  </a-modal>
+    <div class="drawer-wrap">
+      <div class="drawer-body">
+        <a-steps :current="1">
+          <a-step>
+            <!-- <span slot="title">Finished</span> -->
+            <template slot="title">
+              Finished
+            </template>
+            <span slot="description">This is a description.</span>
+          </a-step>
+          <a-step title="In Progress" description="This is a description." />
+          <a-step title="Waiting" description="This is a description." />
+        </a-steps>
+      </div>
+
+      <div class="drawer-footer">
+        <a-button @click="handleCancel">取消</a-button>
+        <a-button type="primary" :loading="confirmLoading" @click="handleOk">确定</a-button>
+      </div>
+    </div>
+
+  </a-drawer>
 </template>
 
 <script>

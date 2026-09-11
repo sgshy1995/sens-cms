@@ -1,17 +1,17 @@
-import storage from "store";
-import expirePlugin from "store/plugins/expire";
-import { userApi } from "@/service/api";
-import { ACCESS_TOKEN } from "@/store/mutation-types";
-import { welcome } from "@/utils/util";
-import { getAction, postAction } from "@/utils/manage";
+import storage from 'store'
+import expirePlugin from 'store/plugins/expire'
+import { userApi } from '@/service/api'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { welcome } from '@/utils/util'
+import { getAction, postAction } from '@/utils/manage'
 
-storage.addPlugin(expirePlugin);
+storage.addPlugin(expirePlugin)
 const user = {
   state: {
-    token: "",
-    name: "",
-    welcome: "",
-    avatar: "",
+    token: '',
+    name: '',
+    welcome: '',
+    avatar: '',
     roles: [],
     info: {
       id: null,
@@ -35,44 +35,44 @@ const user = {
 
   mutations: {
     SET_TOKEN: (state, token) => {
-      state.token = token;
+      state.token = token
     },
     SET_NAME: (state, { name, welcome }) => {
-      state.name = name;
-      state.welcome = welcome;
+      state.name = name
+      state.welcome = welcome
     },
     SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar;
+      state.avatar = avatar
     },
     SET_ROLES: (state, roles) => {
-      state.roles = roles;
+      state.roles = roles
     },
     SET_INFO: (state, info) => {
-      state.info = info;
+      state.info = info
     }
   },
 
   actions: {
     // 登录
-    Login({ commit }, userInfo) {
+    Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         postAction(userApi.login, userInfo).then(response => {
-          const result = response.data;
-          storage.set(ACCESS_TOKEN, result.token, new Date().getTime() + result.expiration * 1000);
-          commit("SET_TOKEN", result.token);
-          resolve();
+          const result = response.data
+          storage.set(ACCESS_TOKEN, result.token, new Date().getTime() + result.expiration * 1000)
+          commit('SET_TOKEN', result.token)
+          resolve()
         }).catch(error => {
-          reject(error);
-        });
-      });
+          reject(error)
+        })
+      })
     },
 
     // 获取用户信息
-    GetInfo({ commit }) {
+    GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
         // 请求后端获取用户信息 /api/user/info
         getAction(userApi.getInfo).then(response => {
-          const { data } = response;
+          const { data } = response
           const roleObj = {
             id: 'admin',
             name: '管理员',
@@ -580,6 +580,42 @@ const user = {
           }
           roleObj.permissions.push({
             roleId: 'admin',
+            permissionId: 'forum',
+            permissionName: '论坛管理',
+            actions:
+              '[{"action":"add","defaultCheck":false,"describe":"新增"},{"action":"query","defaultCheck":false,"describe":"查询"},{"action":"get","defaultCheck":false,"describe":"详情"},{"action":"update","defaultCheck":false,"describe":"修改"},{"action":"delete","defaultCheck":false,"describe":"删除"}]',
+            actionEntitySet: [
+              {
+                action: 'add',
+                describe: '新增',
+                defaultCheck: false
+              },
+              {
+                action: 'query',
+                describe: '查询',
+                defaultCheck: false
+              },
+              {
+                action: 'get',
+                describe: '详情',
+                defaultCheck: false
+              },
+              {
+                action: 'update',
+                describe: '修改',
+                defaultCheck: false
+              },
+              {
+                action: 'delete',
+                describe: '删除',
+                defaultCheck: false
+              }
+            ],
+            actionList: null,
+            dataAccess: null
+          })
+          roleObj.permissions.push({
+            roleId: 'admin',
             permissionId: 'support',
             permissionName: '超级模块',
             actions:
@@ -620,45 +656,45 @@ const user = {
             dataAccess: null
           })
           data.role = roleObj
-          resolve(data);
+          resolve(data)
           if (data.role && data.role.permissions.length > 0) {
-            const role = { ...data.role };
+            const role = { ...data.role }
             role.permissions = data.role.permissions.map(permission => {
               const per = {
                 ...permission,
                 actionList: (permission.actionEntitySet || {}).map(item => item.action)
-              };
-              return per;
-            });
+              }
+              return per
+            })
             role.permissionList = role.permissions.map(permission => {
-              return permission.permissionId;
-            });
+              return permission.permissionId
+            })
             // 覆盖响应体的 role, 供下游使用
-            data.role = role;
+            data.role = role
 
-            commit("SET_ROLES", role);
-            commit("SET_INFO", data);
-            commit("SET_NAME", { name: data.name, welcome: welcome() });
-            commit("SET_AVATAR", data.avatar);
+            commit('SET_ROLES', role)
+            commit('SET_INFO', data)
+            commit('SET_NAME', { name: data.name, welcome: welcome() })
+            commit('SET_AVATAR', data.avatar)
             // 下游
-            resolve(data);
+            resolve(data)
           } else {
-            reject(new Error("getInfo: roles must be a non-null array !"));
+            reject(new Error('getInfo: roles must be a non-null array !'))
           }
         }).catch(error => {
-          reject(error);
-        });
-      });
+          reject(error)
+        })
+      })
     },
 
     // 登出
-    Logout({ commit, state }) {
+    Logout ({ commit, state }) {
       return new Promise((resolve) => {
-        commit("SET_TOKEN", "");
-        commit("SET_ROLES", []);
-        storage.remove(ACCESS_TOKEN);
-        resolve();
-        /*postAction(userApi.logout).then(() => {
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        storage.remove(ACCESS_TOKEN)
+        resolve()
+        /* postAction(userApi.logout).then(() => {
           commit("SET_TOKEN", "");
           commit("SET_ROLES", []);
           storage.remove(ACCESS_TOKEN);
@@ -667,11 +703,11 @@ const user = {
           console.log("logout fail:", err);
           // resolve()
         }).finally(() => {
-        });*/
-      });
+        }); */
+      })
     }
 
   }
-};
+}
 
-export default user;
+export default user
