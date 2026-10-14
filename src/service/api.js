@@ -134,6 +134,33 @@ const forumCommentApi = {
   deleteOneById: (id) => `/forum_comment/${id}`
 }
 
+const rehabVideoApi = {
+  get: '/rehab_video/custom',
+  create: '/rehab_video',
+  update: '/rehab_video',
+  getOneById: (id) => `/rehab_video/id/${id}`,
+  deleteOneById: (id) => `/rehab_video/id/${id}`,
+  uploadContent: '/rehab_video/upload/content',
+  uploadCover: '/rehab_video/upload/cover'
+}
+
+const rehabImageApi = {
+  get: '/rehab_image/custom',
+  create: '/rehab_image',
+  update: '/rehab_image',
+  getOneById: (id) => `/rehab_image/id/${id}`,
+  deleteOneById: (id) => `/rehab_image/id/${id}`,
+  uploadContent: '/rehab_image/upload/content'
+}
+
+const rehabTextApi = {
+  get: '/rehab_text/custom',
+  create: '/rehab_text',
+  update: '/rehab_text',
+  getOneById: (id) => `/rehab_text/id/${id}`,
+  deleteOneById: (id) => `/rehab_text/id/${id}`
+}
+
 export {
   userApi,
   prescriptionApi,
@@ -151,5 +178,8 @@ export {
   usersApi,
   authenticatesApi,
   forumArticleApi,
-  forumCommentApi
+  forumCommentApi,
+  rehabVideoApi,
+  rehabImageApi,
+  rehabTextApi
 }

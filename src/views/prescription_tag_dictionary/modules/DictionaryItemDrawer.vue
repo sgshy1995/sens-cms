@@ -19,6 +19,7 @@
           :data-source="items"
           :loading="loading"
           :pagination="{ pageSize: 8, showSizeChanger: true }"
+          :scroll="{ x: 720 }"
         >
           <span slot="status" slot-scope="text">
             <a-tag :color="text === 1 ? 'green' : 'red'">
@@ -74,11 +75,11 @@ import { deleteAction, getAction, postAction, putAction } from '@/utils/manage'
 import { prescriptionTagDictionaryItemApi } from '@/service/api'
 
 const columns = [
-  { title: 'Value', dataIndex: 'value' },
-  { title: '名称', dataIndex: 'name' },
+  { title: 'Value', dataIndex: 'value', width: '180px', ellipsis: true },
+  { title: '名称', dataIndex: 'name', width: '180px', ellipsis: true },
   { title: '优先级', dataIndex: 'priority', width: '100px' },
   { title: '状态', dataIndex: 'status', width: '100px', scopedSlots: { customRender: 'status' } },
-  { title: '操作', width: '140px', scopedSlots: { customRender: 'action' } }
+  { title: '操作', width: '140px', fixed: 'right', scopedSlots: { customRender: 'action' } }
 ]
 
 export default {

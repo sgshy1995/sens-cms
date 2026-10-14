@@ -92,6 +92,27 @@ export const asyncRouterMap = [
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/recovery/Prescription'),
             meta: { title: '运动处方', keepAlive: true, permission: ['recovery'] }
+          },
+          {
+            path: '/recovery/rehab_video',
+            name: 'RehabVideo',
+            hideChildrenInMenu: true,
+            component: () => import('@/views/rehab_video/RehabVideo'),
+            meta: { title: '康复视频', keepAlive: true, permission: ['recovery'] }
+          },
+          {
+            path: '/recovery/rehab_image',
+            name: 'RehabImage',
+            hideChildrenInMenu: true,
+            component: () => import('@/views/rehab_image/RehabImage'),
+            meta: { title: '康复图片', keepAlive: true, permission: ['recovery'] }
+          },
+          {
+            path: '/recovery/rehab_text',
+            name: 'RehabText',
+            hideChildrenInMenu: true,
+            component: () => import('@/views/rehab_text/RehabText'),
+            meta: { title: '康复文字', keepAlive: true, permission: ['recovery'] }
           }
         ]
       },

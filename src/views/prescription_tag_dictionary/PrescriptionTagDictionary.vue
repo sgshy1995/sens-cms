@@ -38,9 +38,10 @@
         :data-source="dictionaries"
         :loading="loading"
         :pagination="{ pageSize: 10, showSizeChanger: true }"
+        :scroll="{ x: 1400 }"
       >
         <span slot="tagName" slot-scope="text">
-          {{ tagName(text) }}
+          <span class="ellipsis-text" :title="tagName(text)">{{ tagName(text) }}</span>
         </span>
         <span slot="status" slot-scope="text">
           <a-tag :color="text === 1 ? 'green' : 'red'">
@@ -88,14 +89,14 @@ import { prescriptionTagApi, prescriptionTagDictionaryApi, prescriptionTagDictio
 
 const columns = [
   { title: '#', dataIndex: 'index', width: '64px', customRender: (text, record, index) => index + 1 },
-  { title: '字典名称', dataIndex: 'name' },
-  { title: 'Code', dataIndex: 'code' },
-  { title: '所属处方标签', dataIndex: 'prescription_tag_id', scopedSlots: { customRender: 'tagName' } },
+  { title: '字典名称', dataIndex: 'name', width: '180px', ellipsis: true },
+  { title: 'Code', dataIndex: 'code', width: '160px', ellipsis: true },
+  { title: '所属处方标签', dataIndex: 'prescription_tag_id', width: '180px', ellipsis: true, scopedSlots: { customRender: 'tagName' } },
   { title: '字典项数量', dataIndex: 'item_count', width: '120px' },
   { title: '优先级', dataIndex: 'priority', width: '100px' },
   { title: '状态', dataIndex: 'status', width: '100px', scopedSlots: { customRender: 'status' } },
-  { title: '更新时间', dataIndex: 'updated_at', scopedSlots: { customRender: 'updatedAt' } },
-  { title: '操作', width: '250px', scopedSlots: { customRender: 'action' } }
+  { title: '更新时间', dataIndex: 'updated_at', width: '180px', scopedSlots: { customRender: 'updatedAt' } },
+  { title: '操作', width: '250px', fixed: 'right', scopedSlots: { customRender: 'action' } }
 ]
 
 export default {
@@ -195,3 +196,14 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.ellipsis-text {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+</style>
