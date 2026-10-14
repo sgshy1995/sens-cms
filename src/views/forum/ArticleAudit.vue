@@ -20,14 +20,18 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="康复标签">
-                <a-cascader
-                  style="width: 100%"
-                  :options="tagOptions"
+                <a-select
                   v-model="queryParam.tag"
-                  change-on-select
+                  style="width: 100%"
                   allow-clear
+                  show-search
+                  option-filter-prop="children"
                   placeholder="请选择康复标签"
-                />
+                >
+                  <a-select-option v-for="tag in tagOptions" :key="tag.id" :value="tag.id">
+                    {{ tag.title }}
+                  </a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
             <a-col :md="!advanced && 8 || 24" :sm="24">
@@ -96,7 +100,6 @@ import AuditModal from './modules/AuditModal'
 
 import { getAction } from '@/utils/manage'
 import { forumArticleApi, prescriptionTagApi } from '@/service/api'
-import { buildTagTree } from './modules/tagTree'
 
 const columns = [
   {
@@ -163,15 +166,10 @@ export default {
       queryParam: {
         audit_status: '0',
         status: '1',
-        tag: []
+        tag: undefined
       },
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
-        if (Array.isArray(requestParameters.tag) && requestParameters.tag.length) {
-          requestParameters.tag = requestParameters.tag[requestParameters.tag.length - 1]
-        } else {
-          requestParameters.tag = ''
-        }
         return getAction(forumArticleApi.get, requestParameters)
           .then(res => {
             this.totalNum = res.data.totalCount
@@ -204,14 +202,14 @@ export default {
       this.queryParam = {
         audit_status: '0',
         status: '1',
-        tag: []
+        tag: undefined
       }
       this.$refs.table.refresh(true)
     },
     loadTagOptions () {
       getAction(prescriptionTagApi.getAll).then(res => {
         const data = res.data || []
-        this.tagOptions = buildTagTree(data)
+        this.tagOptions = data
       }).catch(() => {})
     },
     onSelectChange (selectedRowKeys, selectedRows) {

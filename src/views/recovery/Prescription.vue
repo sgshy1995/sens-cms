@@ -12,7 +12,11 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="处方标签">
-                <a-cascader change-on-select v-model="queryParam.tag" :options="dataSource" @change="onChange"  placeholder="请选择处方标签查询" />
+                <a-select v-model="queryParam.rehabilitation" allow-clear show-search option-filter-prop="children" placeholder="请选择处方标签查询">
+                  <a-select-option v-for="tag in dataList" :key="tag.id" :value="tag.id">
+                    {{ tag.title }}
+                  </a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
@@ -107,20 +111,8 @@
           <span>{{ text === 0 ? "文章" : "视频" }}</span>
         </span>
 
-        <span slot="rehabilitation" slot-scope="text">
-          {{ dataList.find(i => i.id === text) ? dataList.find(i => i.id === text).title : '' }}
-        </span>
-
-        <span slot="part" slot-scope="text">
-          {{ dataList.find(i => i.id === text) ? dataList.find(i => i.id === text).title : '' }}
-        </span>
-
-        <span slot="symptoms" slot-scope="text">
-          {{ dataList.find(i => i.id === text) ? dataList.find(i => i.id === text).title : '' }}
-        </span>
-
-        <span slot="phase" slot-scope="text">
-          {{ dataList.find(i => i.id === text) ? dataList.find(i => i.id === text).title : '' }}
+        <span slot="tagName" slot-scope="text">
+          {{ dataList.find(i => i.id === text) ? dataList.find(i => i.id === text).title : '-' }}
         </span>
 
         <span slot="status" slot-scope="text" style="font-weight: bold">
@@ -218,24 +210,9 @@ const columns = [
     dataIndex: "time_length"
   },
   {
-    title: "复健类型",
+    title: "处方标签",
     dataIndex: "rehabilitation",
-    scopedSlots: { customRender: "rehabilitation" }
-  },
-  {
-    title: "部位",
-    dataIndex: "part",
-    scopedSlots: { customRender: "part" }
-  },
-  {
-    title: "问题",
-    dataIndex: "symptoms",
-    scopedSlots: { customRender: "symptoms" }
-  },
-  {
-    title: "阶段",
-    dataIndex: "phase",
-    scopedSlots: { customRender: "phase" }
+    scopedSlots: { customRender: "tagName" }
   },
   {
     title: "优先级",
@@ -291,7 +268,7 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        tag: []
+        rehabilitation: undefined
       },
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
@@ -316,86 +293,6 @@ export default {
               key: i.id
             }
           })
-          let dataSourceGet = [];
-          this.dataListLable = data.map(i => {
-            return {
-              ...i,
-              value: i.id,
-              label: i.title
-            }
-          })
-
-          data.forEach((item, index) => {
-            if (item.parent_id === '0'){
-              console.log('dataSourceGet', dataSourceGet)
-              dataSourceGet.push({
-                ...item,
-                value: item.id,
-                label: item.title,
-                children: []
-              })
-            }
-          })
-
-          data.forEach((item, index) => {
-            if (item.level === 2){
-              const indexFind = dataSourceGet.findIndex(i => i.id === item.parent_id);
-              dataSourceGet[indexFind].children.push({
-                ...item,
-                value: item.id,
-                label: item.title,
-                children: []
-              })
-            }
-          })
-
-          data.forEach((item, index) => {
-            if (item.level === 3){
-              let indexFind = 0;
-              let indexFind1 = 0;
-              dataSourceGet.forEach((itemIn, indexIn) => {
-                itemIn.children.forEach((itemInner, indexInner) => {
-                  if (itemInner.id === item.parent_id){
-                    indexFind = indexIn;
-                    indexFind1 = indexInner;
-                  }
-                })
-              })
-              dataSourceGet[indexFind].children[indexFind1].children.push({
-                ...item,
-                value: item.id,
-                label: item.title,
-                children: []
-              })
-            }
-          })
-
-          data.forEach((item, index) => {
-            if (item.level === 4){
-              let indexFind = 0;
-              let indexFind1 = 0;
-              let indexFind2 = 0;
-              dataSourceGet.forEach((itemIn, indexIn) => {
-                itemIn.children.forEach((itemInner, indexInner) => {
-                  itemInner.children.forEach((itemInnerIn, indexInnerIn) => {
-                    if (itemInnerIn.id === item.parent_id){
-                      indexFind = indexIn;
-                      indexFind1 = indexInner;
-                      indexFind2 = indexInnerIn;
-                    }
-                  })
-                })
-              })
-              dataSourceGet[indexFind].children[indexFind1].children[indexFind2].children.push({
-                ...item,
-                value: item.id,
-                label: item.title,
-                children: []
-              })
-            }
-          })
-
-          this.dataSource = [...dataSourceGet]
           return responses[0].data;
         }).finally(() => {
           this.$refs.table.clearSelected();
@@ -412,7 +309,6 @@ export default {
           onChange: this.onSelectChange
         }
       },
-      dataSource: [],
       selectedRowKeys: [],
       selectedRows: [],
       dataList: [],
@@ -439,16 +335,9 @@ export default {
     }
   },
   methods: {
-    onChange(value) {
-      console.log(value);
-      this.queryParam.rehabilitation = value.length >= 1 ? value[0] : undefined;
-      this.queryParam.part = value.length >= 2 ? value[1] : undefined;
-      this.queryParam.symptoms = value.length >= 3 ? value[2] : undefined;
-      this.queryParam.phase = value.length >= 4 ? value[3] : undefined;
-    },
     handleReset() {
       this.queryParam = {
-        tag: []
+        rehabilitation: undefined
       };
       this.$refs.table.refresh(true);
     },
@@ -511,7 +400,7 @@ export default {
     handleOk() {
       this.handleCancel()
       this.queryParam = {
-        tag: []
+        rehabilitation: undefined
       }
       this.$refs.table.refresh(true)
     },

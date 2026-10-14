@@ -80,6 +80,13 @@ export const asyncRouterMap = [
             meta: { title: '处方标签管理', keepAlive: true, permission: ['recovery'] }
           },
           {
+            path: '/recovery/prescription_tag_dictionary',
+            name: 'PrescriptionTagDictionary',
+            hideChildrenInMenu: true,
+            component: () => import('@/views/prescription_tag_dictionary/PrescriptionTagDictionary'),
+            meta: { title: '处方标签字典', keepAlive: true, permission: ['recovery'] }
+          },
+          {
             path: '/recovery/prescription',
             name: 'Prescription',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu

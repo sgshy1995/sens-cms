@@ -37,6 +37,24 @@ const prescriptionTagApi = {
   deleteOneById: (id) => `/prescription_tag/id/${id}`
 }
 
+const prescriptionTagDictionaryApi = {
+  getAll: '/prescription_tag_dictionary',
+  getCustom: '/prescription_tag_dictionary/custom',
+  create: '/prescription_tag_dictionary',
+  update: '/prescription_tag_dictionary',
+  getOneById: (id) => `/prescription_tag_dictionary/id/${id}`,
+  deleteOneById: (id) => `/prescription_tag_dictionary/id/${id}`
+}
+
+const prescriptionTagDictionaryItemApi = {
+  getAll: '/prescription_tag_dictionary_item',
+  getCustom: '/prescription_tag_dictionary_item/custom',
+  create: '/prescription_tag_dictionary_item',
+  update: '/prescription_tag_dictionary_item',
+  getOneById: (id) => `/prescription_tag_dictionary_item/id/${id}`,
+  deleteOneById: (id) => `/prescription_tag_dictionary_item/id/${id}`
+}
+
 const liveCourseApi = {
   get: '/live_course/custom',
   create: '/live_course',
@@ -120,6 +138,8 @@ export {
   userApi,
   prescriptionApi,
   prescriptionTagApi,
+  prescriptionTagDictionaryApi,
+  prescriptionTagDictionaryItemApi,
   liveCourseApi,
   offlineCourseApi,
   videoCourseApi,

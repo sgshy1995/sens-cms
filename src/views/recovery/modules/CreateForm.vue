@@ -55,23 +55,11 @@
               <a-input v-model="form.time_length" placeholder="请输入处方时长，如1时2分33秒" />
             </a-form-model-item>
             <a-form-model-item label="处方标签" required prop="tag">
-              <a-cascader change-on-select v-model="form.tag" :options="dataSource" @change="onChange" placeholder="请选择处方标签" />
-            </a-form-model-item>
-            <a-form-model-item label="复健类型" prop="rehabilitation" v-show="form.tag.length">
-              <a-input readOnly v-model="form.rehabilitation" placeholder="未选择"></a-input>
-              <div style="color: #096dd9;line-height: 1.5">根据选择的处方标签自动显示。</div>
-            </a-form-model-item>
-            <a-form-model-item label="关节部位" prop="part" v-show="form.tag.length">
-              <a-input readOnly v-model="form.part" placeholder="未选择"></a-input>
-              <div style="color: #096dd9;line-height: 1.5">根据选择的处方标签自动显示。</div>
-            </a-form-model-item>
-            <a-form-model-item label="症状" prop="symptoms" v-show="form.tag.length">
-              <a-input readOnly v-model="form.symptoms" placeholder="未选择"></a-input>
-              <div style="color: #096dd9;line-height: 1.5">根据选择的处方标签自动显示。</div>
-            </a-form-model-item>
-            <a-form-model-item label="阶段" prop="phase" v-show="form.tag.length">
-              <a-input readOnly v-model="form.phase" placeholder="未选择"></a-input>
-              <div style="color: #096dd9;line-height: 1.5">根据选择的处方标签自动显示。</div>
+              <a-select v-model="form.tag" show-search option-filter-prop="children" placeholder="请选择处方标签">
+                <a-select-option v-for="tag in dataList" :key="tag.id" :value="tag.id">
+                  {{ tag.title }}
+                </a-select-option>
+              </a-select>
             </a-form-model-item>
             <a-form-model-item label="优先级" required prop="priority">
               <a-input-number
@@ -118,14 +106,8 @@
 </template>
 
 <script>
-import pick from 'lodash.pick'
-import { Modal } from 'ant-design-vue'
 import { getAction, postAction, putAction, uploadAction } from '@/utils/manage'
 import { prescriptionApi, prescriptionTagApi } from '@/service/api'
-
-// 表单字段
-const fields = ['id', 'title', 'prescription_type', 'description', 'gist', 'difficulty', 'time_length', 'part', 'symptoms', 'phase', 'status', 'prescription_video', 'cover']
-
 export default {
   props: {
     visible: {
@@ -173,11 +155,7 @@ export default {
         difficulty: undefined,
         time_length: '',
         status: undefined,
-        tag: [],
-        rehabilitation: undefined,
-        part: undefined,
-        symptoms: undefined,
-        phase: undefined,
+        tag: undefined,
         priority: 0
       },
       fileList: [],
@@ -190,7 +168,6 @@ export default {
       cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
       id: '',
       dataList: [],
-      dataSource: [],
       viewType: 'add'
     }
   },
@@ -219,7 +196,6 @@ export default {
         .then(res => {
           const data = res.data
           console.log('data', data)
-          const dataSourceGet = []
           this.dataList = data.map(i => {
             return {
               ...i,
@@ -227,78 +203,6 @@ export default {
               label: i.title
             }
           })
-
-          data.forEach((item, index) => {
-            if (item.parent_id === '0') {
-              console.log('dataSourceGet', dataSourceGet)
-              dataSourceGet.push({
-                ...item,
-                value: item.id,
-                label: item.title,
-                children: []
-              })
-            }
-          })
-
-          data.forEach((item, index) => {
-            if (item.level === 2) {
-              const indexFind = dataSourceGet.findIndex(i => i.id === item.parent_id)
-              dataSourceGet[indexFind].children.push({
-                ...item,
-                value: item.id,
-                label: item.title,
-                children: []
-              })
-            }
-          })
-
-          data.forEach((item, index) => {
-            if (item.level === 3) {
-              let indexFind = 0
-              let indexFind1 = 0
-              dataSourceGet.forEach((itemIn, indexIn) => {
-                itemIn.children.forEach((itemInner, indexInner) => {
-                  if (itemInner.id === item.parent_id) {
-                    indexFind = indexIn
-                    indexFind1 = indexInner
-                  }
-                })
-              })
-              dataSourceGet[indexFind].children[indexFind1].children.push({
-                ...item,
-                value: item.id,
-                label: item.title,
-                children: []
-              })
-            }
-          })
-
-          data.forEach((item, index) => {
-            if (item.level === 4) {
-              let indexFind = 0
-              let indexFind1 = 0
-              let indexFind2 = 0
-              dataSourceGet.forEach((itemIn, indexIn) => {
-                itemIn.children.forEach((itemInner, indexInner) => {
-                  itemInner.children.forEach((itemInnerIn, indexInnerIn) => {
-                    if (itemInnerIn.id === item.parent_id) {
-                      indexFind = indexIn
-                      indexFind1 = indexInner
-                      indexFind2 = indexInnerIn
-                    }
-                  })
-                })
-              })
-              dataSourceGet[indexFind].children[indexFind1].children[indexFind2].children.push({
-                ...item,
-                value: item.id,
-                label: item.title,
-                children: []
-              })
-            }
-          })
-
-          this.dataSource = [...dataSourceGet]
 
           if (id) {
             getAction(prescriptionApi.getOneById(id))
@@ -319,25 +223,7 @@ export default {
                   this.coverUrl = this.cdnUrl + data.cover
                 }
 
-                this.form.tag = []
-
-                if (data.rehabilitation) {
-                  this.form.tag.push(data.rehabilitation)
-                }
-                if (data.part) {
-                  this.form.tag.push(data.part)
-                }
-                if (data.symptoms) {
-                  this.form.tag.push(data.symptoms)
-                }
-                if (data.phase) {
-                  this.form.tag.push(data.phase)
-                }
-
-                this.form.rehabilitation = data.rehabilitation ? this.dataList.find(i => i.id === data.rehabilitation).title : undefined
-                this.form.part = data.part ? this.dataList.find(i => i.id === data.part).title : undefined
-                this.form.symptoms = data.symptoms ? this.dataList.find(i => i.id === data.symptoms).title : undefined
-                this.form.phase = data.phase ? this.dataList.find(i => i.id === data.phase).title : undefined
+                this.form.tag = data.rehabilitation || data.part || data.symptoms || data.phase || undefined
 
                 this.loading = false
               })
@@ -347,13 +233,6 @@ export default {
         }).finally(() => {
 
       })
-    },
-    onChange (value) {
-      console.log(value)
-      this.form.rehabilitation = value.length >= 1 ? this.dataList.find(i => i.id === value[0]).title : undefined
-      this.form.part = value.length >= 2 ? this.dataList.find(i => i.id === value[1]).title : undefined
-      this.form.symptoms = value.length >= 3 ? this.dataList.find(i => i.id === value[2]).title : undefined
-      this.form.phase = value.length >= 4 ? this.dataList.find(i => i.id === value[3]).title : undefined
     },
     handleOk () {
       const that = this
@@ -383,10 +262,10 @@ export default {
             difficulty: this.form.difficulty,
             time_length: this.form.time_length,
             status: this.form.status,
-            rehabilitation: this.form.tag[0],
-            part: this.form.tag[1] ? this.form.tag[1] : null,
-            symptoms: this.form.tag[2] ? this.form.tag[2] : null,
-            phase: this.form.tag[3] ? this.form.tag[3] : null,
+            rehabilitation: this.form.tag,
+            part: null,
+            symptoms: null,
+            phase: null,
             priority: this.form.priority
           }
           if (this.viewType === 'add') {
@@ -473,7 +352,7 @@ export default {
             reject(res.message)
           }
         }).catch(err1 => {
-          reject('操作失败')
+          reject(new Error('操作失败'))
         })
       })
     },
@@ -567,11 +446,7 @@ export default {
         difficulty: undefined,
         time_length: '',
         status: undefined,
-        tag: [],
-        rehabilitation: undefined,
-        part: undefined,
-        symptoms: undefined,
-        phase: undefined,
+        tag: undefined,
         priority: 0
       }
     }

@@ -19,14 +19,18 @@
               <a-textarea @change="handleSummaryChange" :rows="3" v-decorator="['summary', {rules: [{max: 200, message: '最多200个字符'}]}]" placeholder="请输入文章摘要（选填）" />
             </a-form-item>
             <a-form-item label="康复标签">
-              <a-cascader
+              <a-select
                 style="width: 100%"
                 v-decorator="['tag']"
-                :options="tagOptions"
-                change-on-select
                 allow-clear
+                show-search
+                option-filter-prop="children"
                 placeholder="请选择康复标签（选填）"
-              />
+              >
+                <a-select-option v-for="tag in tagOptions" :key="tag.id" :value="tag.id">
+                  {{ tag.title }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
             <a-form-item label="封面图">
               <img style="width: 300px;margin-bottom: 12px;border-radius: 6px" v-if="coverUrl" :src="coverUrl" alt="cover">
@@ -81,7 +85,6 @@ import pick from 'lodash.pick'
 import WangEditor from '@/components/Editor/WangEditor'
 import { getAction } from '@/utils/manage'
 import { forumArticleApi, prescriptionTagApi } from '@/service/api'
-import { buildTagTree, getTagPath } from './tagTree'
 import { resolveFileUrl } from '@/utils/util'
 
 // 表单字段
@@ -120,7 +123,6 @@ export default {
       form: this.$form.createForm(this),
       fileListImg: [],
       tagOptions: [],
-      tagDataList: [],
       coverUrl: '',
       id: '',
       editorContent: '',
@@ -155,11 +157,7 @@ export default {
           return
         }
         this.form.setFieldsValue(pick(this.model, fields))
-        if (this.model.tag) {
-          this.form.setFieldsValue({ tag: getTagPath(this.tagDataList, this.model.tag) })
-        } else {
-          this.form.setFieldsValue({ tag: [] })
-        }
+        this.form.setFieldsValue({ tag: this.model.tag || undefined })
         this.previewTitle = this.model.title || ''
         this.previewSummary = this.model.summary || ''
         this.$nextTick(() => {
@@ -178,10 +176,9 @@ export default {
     loadTagOptions () {
       getAction(prescriptionTagApi.getAll).then(res => {
         const data = res.data || []
-        this.tagDataList = data
-        this.tagOptions = buildTagTree(data)
-        if (this.model && this.model.tag) {
-          this.form.setFieldsValue({ tag: getTagPath(data, this.model.tag) })
+        this.tagOptions = data
+        if (this.model) {
+          this.form.setFieldsValue({ tag: this.model.tag || undefined })
         }
       }).catch(() => {})
     },
