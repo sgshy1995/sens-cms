@@ -113,6 +113,13 @@ export const asyncRouterMap = [
             hideChildrenInMenu: true,
             component: () => import('@/views/rehab_text/RehabText'),
             meta: { title: '康复文字', keepAlive: true, permission: ['recovery'] }
+          },
+          {
+            path: '/recovery/rehab_combination_course',
+            name: 'RehabCombinationCourse',
+            hideChildrenInMenu: true,
+            component: () => import('@/views/rehab_combination_course/RehabCombinationCourse'),
+            meta: { title: '康复组合课程', keepAlive: true, permission: ['recovery'] }
           }
         ]
       },

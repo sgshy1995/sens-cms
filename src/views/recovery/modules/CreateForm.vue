@@ -346,13 +346,9 @@ export default {
     handleUpdateForm (formIn) {
       return new Promise((resolve, reject) => {
         putAction(prescriptionApi.update, formIn).then(res => {
-          if (res.code === 200) {
-            resolve(res.message)
-          } else {
-            reject(res.message)
-          }
-        }).catch(err1 => {
-          reject(new Error('操作失败'))
+          resolve(res.message)
+        }).catch(err => {
+          reject(new Error((err.data && err.data.message) || '操作失败'))
         })
       })
     },

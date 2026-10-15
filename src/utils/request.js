@@ -16,24 +16,28 @@ const request = axios.create({
 const errorHandler = (error) => {
   if (error.response) {
     const data = error.response.data
+    // 统一错误结构，便于调用方通过 err.data.message 读取后端返回信息
+    if (data !== undefined) {
+      error.data = data
+    }
     // 从 localstorage 获取 token
     const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
-      /*notification.error({
+      /* notification.error({
         message: 'Forbidden',
         description: data.message
-      })*/
+      }) */
     }
-    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
+    if (error.response.status === 401 && !(data && data.result && data.result.isLogin)) {
       notification.error({
         message: 'Unauthorized',
         description: 'Authorization verification failed'
       })
       if (token) {
         store.dispatch('Logout').then(() => {
-          /*setTimeout(() => {
+          /* setTimeout(() => {
             window.location.reload()
-          }, 1500)*/
+          }, 1500) */
         })
       }
     }
@@ -54,7 +58,20 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
-  return response.data
+  const res = response.data
+  // 后端统一以 HTTP 200 + 业务 code 返回，业务失败时 HTTP 状态同样是 200，
+  // 因此需要在此把业务失败转换为 rejected Promise，交由调用方 catch 处理。
+  if (res && typeof res.code === 'number' && res.code !== 200) {
+    const businessError = new Error(res.message || '请求失败')
+    businessError.data = res
+    businessError.response = {
+      status: res.code,
+      data: res
+    }
+    businessError.isBusinessError = true
+    return Promise.reject(businessError)
+  }
+  return res
 }, errorHandler)
 
 const installer = {
