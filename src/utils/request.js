@@ -59,9 +59,9 @@ request.interceptors.request.use(config => {
 // response interceptor
 request.interceptors.response.use((response) => {
   const res = response.data
-  // 后端统一以 HTTP 200 + 业务 code 返回，业务失败时 HTTP 状态同样是 200，
-  // 因此需要在此把业务失败转换为 rejected Promise，交由调用方 catch 处理。
-  if (res && typeof res.code === 'number' && res.code !== 200) {
+  // 后端统一以 HTTP 200 + 业务 code 返回，业务 code 使用 HTTP 状态语义。
+  // 因此 2xx 都视为成功，非 2xx 转换为 rejected Promise 交由调用方 catch 处理。
+  if (res && typeof res.code === 'number' && (res.code < 200 || res.code >= 300)) {
     const businessError = new Error(res.message || '请求失败')
     businessError.data = res
     businessError.response = {
