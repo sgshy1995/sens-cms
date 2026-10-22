@@ -125,12 +125,13 @@ const forumArticleApi = {
   deleteOneById: (id) => `/forum_article/${id}`,
   audit: (id) => `/forum_article/audit/${id}`,
   mark: (id) => `/forum_article/mark/${id}`,
-  getOneById: (id) => `/forum_article/id/${id}`,
+  getOneById: (id) => `/forum_article/admin/id/${id}`,
   uploadCover: '/forum_article/upload/cover'
 }
 
 const forumCommentApi = {
-  getByArticle: (articleId) => `/forum_comment/article/${articleId}`,
+  get: '/forum_comment/custom',
+  audit: (id) => `/forum_comment/audit/${id}`,
   deleteOneById: (id) => `/forum_comment/${id}`
 }
 
