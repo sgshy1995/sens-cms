@@ -154,6 +154,7 @@
 </template>
 
 <script>
+import { fileBaseUrl } from '@/utils/fileUrl'
 import { authenticatesApi } from '@/service/api'
 import { getAction, postAction } from '@/utils/manage'
 import { Empty } from 'ant-design-vue'
@@ -169,8 +170,8 @@ export default {
   data () {
     return {
       moment,
-      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
-      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
+      baseUrl: fileBaseUrl,
+      cdnUrl: fileBaseUrl,
       visible: false,
       loading: false,
       model: {

@@ -132,6 +132,7 @@
 </template>
 
 <script>
+import { fileBaseUrl } from '@/utils/fileUrl'
 import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
@@ -158,7 +159,7 @@ export default {
       radarLoading: true,
       activities: [],
       teams: [],
-      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
+      baseUrl: fileBaseUrl,
       // data
       axis1Opts: {
         dataKey: 'item',

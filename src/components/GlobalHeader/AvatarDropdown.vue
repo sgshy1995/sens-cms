@@ -28,14 +28,15 @@
 </template>
 
 <script>
+import { fileBaseUrl } from '@/utils/fileUrl'
 import { Modal } from 'ant-design-vue'
 
 export default {
   name: 'AvatarDropdown',
   data(){
     return {
-      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
-      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
+      baseUrl: fileBaseUrl,
+      cdnUrl: fileBaseUrl,
     }
   },
   props: {

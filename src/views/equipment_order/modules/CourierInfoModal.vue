@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { fileBaseUrl } from '@/utils/fileUrl'
 import moment from 'moment'
 import { equipmentOrderApi, courierApi } from '@/service/api'
 import { getAction, postAction } from '@/utils/manage'
@@ -79,7 +80,7 @@ export default {
       loading: false,
       info: {},
       dataSource: [],
-      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
+      baseUrl: fileBaseUrl,
       infoList: [],
       courierInfo: {},
       statusMap: {

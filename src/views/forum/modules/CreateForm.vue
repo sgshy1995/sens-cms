@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import { fileBaseUrl } from '@/utils/fileUrl'
 import pick from 'lodash.pick'
 import WangEditor from '@/components/Editor/WangEditor'
 import { getAction } from '@/utils/manage'
@@ -129,7 +130,7 @@ export default {
       previewTitle: '',
       previewSummary: '',
       uploadUrl: process.env.VUE_APP_API_BASE_URL + forumArticleApi.uploadCover,
-      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/'
+      cdnUrl: fileBaseUrl
     }
   },
   created () {

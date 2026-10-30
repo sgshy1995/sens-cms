@@ -192,6 +192,7 @@
 </template>
 
 <script>
+import { fileBaseUrl } from '@/utils/fileUrl'
 import moment from "moment";
 import { STable, Ellipsis } from "@/components";
 import { getRoleList, getServiceList } from "@/api/manage";
@@ -382,7 +383,7 @@ export default {
       dataSource: [],
       selectedRowKeys: [],
       selectedRows: [],
-      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
+      cdnUrl: fileBaseUrl,
     };
   },
   filters: {

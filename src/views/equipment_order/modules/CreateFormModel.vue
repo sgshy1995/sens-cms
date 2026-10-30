@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import { fileBaseUrl } from '@/utils/fileUrl'
 import pick from 'lodash.pick'
 
 // 表单字段
@@ -196,7 +197,7 @@ export default {
       videoUrl: '',
       coverUrl: '',
       coverBlob: null,
-      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
+      baseUrl: fileBaseUrl,
       id: '',
       checkDiscount: false,
       provinces: [

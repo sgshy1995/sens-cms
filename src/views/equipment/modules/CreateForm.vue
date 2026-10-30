@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import { fileBaseUrl } from '@/utils/fileUrl'
 import pick from 'lodash.pick'
 import { equipmentApi } from '@/service/api'
 import { getAction } from '@/utils/manage'
@@ -138,8 +139,8 @@ export default {
       videoUrl: '',
       coverUrl: '',
       coverBlob: null,
-      baseUrl: process.env.VUE_APP_API_BASE_URL + '/',
-      cdnUrl: process.env.VUE_APP_CDN_BASE_URL + '/',
+      baseUrl: fileBaseUrl,
+      cdnUrl: fileBaseUrl,
       id: '',
       checkDiscount: false,
       checkLoading: false
