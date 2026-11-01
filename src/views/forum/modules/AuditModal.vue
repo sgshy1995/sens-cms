@@ -58,7 +58,6 @@
                   <img v-if="model.cover" class="phone-cover" :src="resolveCover(model.cover)" alt="cover">
                   <div class="phone-body">
                     <div class="phone-title">{{ model.title }}</div>
-                    <div class="phone-summary" v-if="model.summary">{{ model.summary }}</div>
                     <div class="phone-content" v-if="model.content" v-html="formatContent(model.content)"></div>
                     <div class="phone-empty-text" v-else>暂无内容</div>
                   </div>
@@ -251,14 +250,6 @@ export default {
     font-weight: 700;
     line-height: 1.4;
     color: #1a1a1a;
-    word-break: break-word;
-  }
-
-  .phone-summary {
-    margin-top: 10px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #666;
     word-break: break-word;
   }
 

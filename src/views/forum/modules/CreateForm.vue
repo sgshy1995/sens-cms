@@ -16,7 +16,7 @@
               <a-input @change="handleTitleChange" v-decorator="['title', {rules: [{required: true, min: 2, max: 60, message: '请输入至少2个字符，最多60个字符'}]}]" placeholder="请输入文章标题" />
             </a-form-item>
             <a-form-item label="文章摘要">
-              <a-textarea @change="handleSummaryChange" :rows="3" v-decorator="['summary', {rules: [{max: 200, message: '最多200个字符'}]}]" placeholder="请输入文章摘要（选填）" />
+              <a-textarea :rows="3" v-decorator="['summary', {rules: [{max: 200, message: '最多200个字符'}]}]" placeholder="请输入文章摘要（选填）" />
             </a-form-item>
             <a-form-item label="康复标签">
               <a-select
@@ -93,7 +93,6 @@
                   <img v-if="coverUrl" class="phone-cover" :src="coverUrl" alt="cover">
                   <div class="phone-body">
                     <div class="phone-title">{{ previewTitle || '文章标题' }}</div>
-                    <div class="phone-summary" v-if="previewSummary">{{ previewSummary }}</div>
                     <div class="phone-content" v-if="editorContent" v-html="formatPreviewContent(editorContent)"></div>
                     <div class="phone-content phone-empty-text" v-else>文章内容将在这里显示</div>
                   </div>
@@ -127,7 +126,7 @@ import {
 import { resolveFileUrl } from '@/utils/util'
 
 // 表单字段
-const fields = ['id', 'title', 'summary', 'cover', 'tag']
+const fields = ['title', 'summary', 'cover', 'tag']
 
 export default {
   props: {
@@ -170,7 +169,6 @@ export default {
       id: '',
       editorContent: '',
       previewTitle: '',
-      previewSummary: '',
       uploadUrl: process.env.VUE_APP_API_BASE_URL + forumArticleApi.uploadCover,
       cdnUrl: fileBaseUrl
     }
@@ -183,41 +181,14 @@ export default {
   watch: {
     visible () {
       if (!this.visible) {
-        this.fileListImg = []
-        this.coverUrl = ''
-        this.editorContent = ''
-        this.id = ''
-        this.previewTitle = ''
-        this.previewSummary = ''
-        this.selectedTagId = ''
-        this.selectedItemIds = []
+        this.resetForm()
+      } else if (this.model) {
+        this.applyModel()
       }
     },
     model: {
       handler () {
-        if (!this.model) {
-          this.editorContent = ''
-          this.form.resetFields()
-          this.previewTitle = ''
-          this.previewSummary = ''
-          this.selectedTagId = ''
-          this.selectedItemIds = []
-          return
-        }
-        this.selectedTagId = this.model.tag || ''
-        this.selectedItemIds = (this.model.dictionary_items || []).map(item => item.dictionary_item_id)
-        this.form.setFieldsValue(pick(this.model, fields))
-        this.form.setFieldsValue({ tag: this.model.tag || undefined })
-        this.previewTitle = this.model.title || ''
-        this.previewSummary = this.model.summary || ''
-        this.$nextTick(() => {
-          const value = this.form.getFieldValue('cover')
-          if (value && typeof value === 'string') {
-            this.coverUrl = resolveFileUrl(value)
-          }
-          this.id = this.form.getFieldValue('id')
-          this.editorContent = this.model.content || ''
-        })
+        this.applyModel()
       },
       deep: true
     }
@@ -228,12 +199,44 @@ export default {
     }
   },
   methods: {
+    resetForm () {
+      this.fileListImg = []
+      this.coverUrl = ''
+      this.editorContent = ''
+      this.id = ''
+      this.previewTitle = ''
+      this.selectedTagId = ''
+      this.selectedItemIds = []
+      this.form.resetFields()
+    },
+    applyModel () {
+      if (!this.model) {
+        this.resetForm()
+        return
+      }
+      this.fileListImg = []
+      this.id = this.model.id || ''
+      this.selectedTagId = this.model.tag || ''
+      this.selectedItemIds = (this.model.dictionary_items || []).map(item => item.dictionary_item_id)
+      this.previewTitle = this.model.title || ''
+      this.editorContent = this.model.content || ''
+      this.$nextTick(() => {
+        this.form.setFieldsValue({
+          ...pick(this.model, fields),
+          tag: this.model.tag || undefined
+        })
+        const value = this.form.getFieldValue('cover')
+        this.coverUrl = value && typeof value === 'string' ? resolveFileUrl(value) : ''
+      })
+    },
     loadTagOptions () {
       getAction(prescriptionTagApi.getAll).then(res => {
         const data = res.data || []
         this.tagOptions = data
         if (this.model) {
-          this.form.setFieldsValue({ tag: this.model.tag || undefined })
+          this.$nextTick(() => {
+            this.form.setFieldsValue({ tag: this.model.tag || undefined })
+          })
         }
       }).catch(() => {})
     },
@@ -283,9 +286,6 @@ export default {
     },
     handleTitleChange (e) {
       this.previewTitle = e.target.value
-    },
-    handleSummaryChange (e) {
-      this.previewSummary = e.target.value
     },
     formatPreviewContent (html) {
       if (!html) return ''
@@ -409,14 +409,6 @@ export default {
     font-weight: 700;
     line-height: 1.4;
     color: #1a1a1a;
-    word-break: break-word;
-  }
-
-  .phone-summary {
-    margin-top: 10px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #666;
     word-break: break-word;
   }
 

@@ -359,7 +359,11 @@ export default {
           this.confirmLoading = false
           return
         }
-        const formIn = { ...values, content }
+        const formIn = {
+          ...values,
+          content,
+          id: this.$refs.createModal.id || undefined
+        }
         if (Array.isArray(formIn.tag) && formIn.tag.length) {
           formIn.tag = formIn.tag[formIn.tag.length - 1]
         } else {

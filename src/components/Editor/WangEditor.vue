@@ -45,9 +45,13 @@ export default {
   },
   watch: {
     value (val) {
-      this.editorContent = val
+      const nextValue = val || ''
+      if (this.editorContent === nextValue) {
+        return
+      }
+      this.editorContent = nextValue
       if (this.editor && this.editor.txt) {
-        this.editor.txt.html(val)
+        this.editor.txt.html(nextValue)
       }
     }
   },
@@ -101,6 +105,15 @@ export default {
 
   ::v-deep .w-e-toolbar {
     flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  ::v-deep .w-e-toolbar .w-e-menu:hover {
+    z-index: 1002 !important;
+  }
+
+  ::v-deep .w-e-toolbar .w-e-droplist {
+    z-index: 1003 !important;
   }
 }
 </style>
