@@ -365,6 +365,13 @@ export default {
         } else {
           formIn.tag = null
         }
+        const dictionaryItems = this.$refs.createModal.dictionaryItemsForSubmit()
+        if (formIn.tag && !dictionaryItems.length) {
+          this.$message.warning('请至少选择一个康复字典项')
+          this.confirmLoading = false
+          return
+        }
+        formIn.dictionary_items = formIn.tag ? dictionaryItems : []
         const hasNewCover = this.$refs.createModal.fileListImg.length > 0
         if (hasNewCover && values.cover && values.cover.file) {
           const formDataCover = new FormData()

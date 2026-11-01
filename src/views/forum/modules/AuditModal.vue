@@ -30,6 +30,10 @@
                 <span class="label">康复标签：</span>
                 <span class="value">{{ model.tag_name || '-' }}</span>
               </div>
+              <div class="audit-row" v-if="dictionaryText">
+                <span class="label">康复字典：</span>
+                <span class="value">{{ dictionaryText }}</span>
+              </div>
               <div class="audit-row" v-if="model.cover">
                 <span class="label">封面：</span>
                 <img class="audit-cover" :src="resolveCover(model.cover)" alt="cover">
@@ -133,6 +137,14 @@ export default {
     },
     resolveCover (cover) {
       return resolveFileUrl(cover)
+    }
+  },
+  computed: {
+    dictionaryText () {
+      const items = Array.isArray(this.model.dictionary_items) ? this.model.dictionary_items : []
+      return items
+        .map(item => `${item.dictionary_name || '-'}：${item.dictionary_item_name || '-'}`)
+        .join('；')
     }
   }
 }

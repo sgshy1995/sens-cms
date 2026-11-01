@@ -26,11 +26,44 @@
                 show-search
                 option-filter-prop="children"
                 placeholder="请选择康复标签（选填）"
+                @change="handleTagChange"
               >
                 <a-select-option v-for="tag in tagOptions" :key="tag.id" :value="tag.id">
                   {{ tag.title }}
                 </a-select-option>
               </a-select>
+            </a-form-item>
+            <a-form-item label="康复字典" :required="!!selectedTagId">
+              <div class="field-tip">选择康复标签后，可在对应字典分类中分别选择一个字典项；每个字典分类只能单选。</div>
+              <a-empty v-if="!selectedTagId" description="请先选择康复标签" />
+              <a-empty v-else-if="!currentTagDictionaries.length" description="该标签下暂无康复字典" />
+              <div v-else class="dictionary-group">
+                <div v-for="dictionary in currentTagDictionaries" :key="dictionary.id" class="dictionary-block">
+                  <div class="dictionary-block-title">
+                    <span>{{ dictionary.name }}</span>
+                    <a v-if="selectedItemIdInDictionary(dictionary.id)" @click="clearDictionary(dictionary.id)">清除</a>
+                  </div>
+                  <a-empty
+                    v-if="!itemsByDictionary(dictionary.id).length"
+                    description="该分类下暂无字典项"
+                    :image-style="{ height: '32px' }"
+                  />
+                  <a-radio-group
+                    v-else
+                    :value="selectedItemIdInDictionary(dictionary.id)"
+                    @change="event => handleDictionarySelect(dictionary.id, event.target.value)"
+                  >
+                    <a-radio
+                      v-for="item in itemsByDictionary(dictionary.id)"
+                      :key="item.id"
+                      :value="item.id"
+                      class="dictionary-item-radio"
+                    >
+                      {{ item.name }}
+                    </a-radio>
+                  </a-radio-group>
+                </div>
+              </div>
             </a-form-item>
             <a-form-item label="封面图">
               <img style="width: 300px;margin-bottom: 12px;border-radius: 6px" v-if="coverUrl" :src="coverUrl" alt="cover">
@@ -85,7 +118,12 @@ import { fileBaseUrl } from '@/utils/fileUrl'
 import pick from 'lodash.pick'
 import WangEditor from '@/components/Editor/WangEditor'
 import { getAction } from '@/utils/manage'
-import { forumArticleApi, prescriptionTagApi } from '@/service/api'
+import {
+  forumArticleApi,
+  prescriptionTagApi,
+  prescriptionTagDictionaryApi,
+  prescriptionTagDictionaryItemApi
+} from '@/service/api'
 import { resolveFileUrl } from '@/utils/util'
 
 // 表单字段
@@ -124,6 +162,10 @@ export default {
       form: this.$form.createForm(this),
       fileListImg: [],
       tagOptions: [],
+      dictionaries: [],
+      dictionaryItems: [],
+      selectedItemIds: [],
+      selectedTagId: '',
       coverUrl: '',
       id: '',
       editorContent: '',
@@ -136,6 +178,7 @@ export default {
   created () {
     fields.forEach(v => this.form.getFieldDecorator(v))
     this.loadTagOptions()
+    this.loadDictionaryOptions()
   },
   watch: {
     visible () {
@@ -146,6 +189,8 @@ export default {
         this.id = ''
         this.previewTitle = ''
         this.previewSummary = ''
+        this.selectedTagId = ''
+        this.selectedItemIds = []
       }
     },
     model: {
@@ -155,8 +200,12 @@ export default {
           this.form.resetFields()
           this.previewTitle = ''
           this.previewSummary = ''
+          this.selectedTagId = ''
+          this.selectedItemIds = []
           return
         }
+        this.selectedTagId = this.model.tag || ''
+        this.selectedItemIds = (this.model.dictionary_items || []).map(item => item.dictionary_item_id)
         this.form.setFieldsValue(pick(this.model, fields))
         this.form.setFieldsValue({ tag: this.model.tag || undefined })
         this.previewTitle = this.model.title || ''
@@ -173,6 +222,11 @@ export default {
       deep: true
     }
   },
+  computed: {
+    currentTagDictionaries () {
+      return this.dictionaries.filter(dictionary => dictionary.prescription_tag_id === this.selectedTagId)
+    }
+  },
   methods: {
     loadTagOptions () {
       getAction(prescriptionTagApi.getAll).then(res => {
@@ -182,6 +236,47 @@ export default {
           this.form.setFieldsValue({ tag: this.model.tag || undefined })
         }
       }).catch(() => {})
+    },
+    loadDictionaryOptions () {
+      return Promise.all([
+        getAction(prescriptionTagDictionaryApi.getCustom, {}),
+        getAction(prescriptionTagDictionaryItemApi.getAll, {})
+      ]).then(([dictionaries, items]) => {
+        this.dictionaries = dictionaries.data || []
+        this.dictionaryItems = items.data || []
+      }).catch(() => {})
+    },
+    itemsByDictionary (dictionaryId) {
+      return this.dictionaryItems.filter(item => item.dictionary_id === dictionaryId)
+    },
+    selectedItemIdInDictionary (dictionaryId) {
+      const item = this.selectedItemIds
+        .map(id => this.dictionaryItems.find(dictionaryItem => dictionaryItem.id === id))
+        .find(dictionaryItem => dictionaryItem && dictionaryItem.dictionary_id === dictionaryId)
+      return item ? item.id : undefined
+    },
+    handleTagChange (tagId) {
+      this.selectedTagId = tagId || ''
+      this.selectedItemIds = []
+    },
+    handleDictionarySelect (dictionaryId, itemId) {
+      const remain = this.selectedItemIds.filter(id => {
+        const item = this.dictionaryItems.find(dictionaryItem => dictionaryItem.id === id)
+        return item && item.dictionary_id !== dictionaryId
+      })
+      this.selectedItemIds = itemId ? [...remain, itemId] : remain
+    },
+    clearDictionary (dictionaryId) {
+      this.handleDictionarySelect(dictionaryId, undefined)
+    },
+    dictionaryItemsForSubmit () {
+      return this.selectedItemIds.map(id => {
+        const item = this.dictionaryItems.find(dictionaryItem => dictionaryItem.id === id)
+        return {
+          dictionary_id: item ? item.dictionary_id : undefined,
+          dictionary_item_id: id
+        }
+      })
     },
     handleEditorChange (html) {
       this.editorContent = html
@@ -226,6 +321,44 @@ export default {
     font-weight: 600;
     color: #333;
   }
+}
+
+.field-tip {
+  margin-bottom: 8px;
+  color: #8c8c8c;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.dictionary-group {
+  max-height: 280px;
+  padding: 4px 12px;
+  overflow-y: auto;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+}
+
+.dictionary-block {
+  padding: 8px 0;
+  border-bottom: 1px dashed #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.dictionary-block-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.dictionary-item-radio {
+  display: inline-flex;
+  margin-right: 16px;
+  margin-bottom: 6px;
 }
 
 .phone-wrap {
