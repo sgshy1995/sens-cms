@@ -26,7 +26,7 @@
                 :src="resolveFileUrl(section.resource_content)"
                 alt="康复图片"
               >
-              <div v-else-if="section.resource_type === 'text'" class="phone-section-text">{{ section.resource_content || '康复文字内容' }}</div>
+              <div v-else-if="section.resource_type === 'text' || section.resource_type === 'custom_text'" class="phone-section-text">{{ section.resource_content || '康复文字内容' }}</div>
               <div v-if="Number(section.extra_type) === 1" class="phone-section-extra">{{ section.resource_remark || '（暂无备注）' }}</div>
               <div v-else-if="Number(section.extra_type) === 2" class="phone-section-extra">{{ section.extra_text }}</div>
             </div>

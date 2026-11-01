@@ -52,7 +52,7 @@
                 </a-form-model-item>
 
                 <a-form-model-item label="阶段正文" required>
-                  <div class="field-tip">自由组合康复视频、图片、文字，可添加多个部分并调整顺序。</div>
+                  <div class="field-tip">自由组合康复视频、图片、文字，也可随时添加自定义文字；所有素材均可调整顺序。</div>
                   <div v-if="!form.sections.length" class="section-empty">尚未添加正文部分</div>
                   <div v-for="(section, index) in form.sections" :key="section.key" class="section-card">
                     <div class="section-card-header">
@@ -70,40 +70,56 @@
                           <a-select-option value="video">康复视频</a-select-option>
                           <a-select-option value="image">康复图片</a-select-option>
                           <a-select-option value="text">康复文字</a-select-option>
+                          <a-select-option value="custom_text">自定义文字</a-select-option>
                         </a-select>
                       </a-col>
                       <a-col :span="16">
-                        <div class="section-field-label">选择{{ resourceTypeName(section.resource_type) }}</div>
-                        <a-select
-                          v-model="section.resource_id"
-                          show-search
-                          option-filter-prop="children"
-                          :placeholder="`请选择${resourceTypeName(section.resource_type)}`"
-                        >
-                          <a-select-option v-for="resource in resourcesByType(section.resource_type)" :key="resource.id" :value="resource.id">
-                            {{ resource.title }}
-                          </a-select-option>
-                        </a-select>
+                        <template v-if="section.resource_type === 'custom_text'">
+                          <div class="section-field-label">输入自定义文字</div>
+                          <a-textarea
+                            v-model="section.custom_text"
+                            :rows="4"
+                            placeholder="请输入要在当前顺序位置展示的自定义文字"
+                          />
+                        </template>
+                        <template v-else>
+                          <div class="section-field-label">选择{{ resourceTypeName(section.resource_type) }}</div>
+                          <a-select
+                            v-model="section.resource_id"
+                            show-search
+                            option-filter-prop="children"
+                            :placeholder="`请选择${resourceTypeName(section.resource_type)}`"
+                          >
+                            <a-select-option v-for="resource in resourcesByType(section.resource_type)" :key="resource.id" :value="resource.id">
+                              {{ resource.title }}
+                            </a-select-option>
+                          </a-select>
+                        </template>
                       </a-col>
                     </a-row>
-                    <div class="section-field-label">下方附加内容</div>
-                    <a-radio-group v-model="section.extra_type">
-                      <a-radio :value="0">不添加，只展示</a-radio>
-                      <a-radio :value="1">展示资源备注</a-radio>
-                      <a-radio :value="2">自定义文字</a-radio>
-                    </a-radio-group>
-                    <a-textarea
-                      v-if="section.extra_type === 2"
-                      v-model="section.extra_text"
-                      :rows="3"
-                      class="section-extra-text"
-                      placeholder="请输入自定义文字"
-                    />
-                    <div v-else-if="section.extra_type === 1" class="section-remark-preview">
-                      备注：{{ resourceRemark(section) || '（该资源暂无备注）' }}
-                    </div>
+                    <template v-if="section.resource_type !== 'custom_text'">
+                      <div class="section-field-label">下方附加内容</div>
+                      <a-radio-group v-model="section.extra_type">
+                        <a-radio :value="0">不添加，只展示</a-radio>
+                        <a-radio :value="1">展示资源备注</a-radio>
+                        <a-radio :value="2">自定义文字</a-radio>
+                      </a-radio-group>
+                      <a-textarea
+                        v-if="section.extra_type === 2"
+                        v-model="section.extra_text"
+                        :rows="3"
+                        class="section-extra-text"
+                        placeholder="请输入自定义文字"
+                      />
+                      <div v-else-if="section.extra_type === 1" class="section-remark-preview">
+                        备注：{{ resourceRemark(section) || '（该资源暂无备注）' }}
+                      </div>
+                    </template>
                   </div>
-                  <a-button type="dashed" block icon="plus" @click="addSection">添加正文部分</a-button>
+                  <div class="section-add-actions">
+                    <a-button type="dashed" block icon="plus" @click="addSection">添加已有素材</a-button>
+                    <a-button type="dashed" block icon="edit" @click="addCustomTextSection">添加自定义文字</a-button>
+                  </div>
                 </a-form-model-item>
 
                 <a-form-model-item label="阶段备注" prop="remark">
@@ -234,6 +250,7 @@ export default {
         remark: this.form.remark,
         sections: this.form.sections.map(section => ({
           resource_type: section.resource_type,
+          custom_text: section.custom_text,
           resource_title: this.sectionTitle(section),
           resource_content: this.resourceContent(section),
           resource_cover: this.resourceCover(section),
@@ -267,6 +284,7 @@ export default {
         key: `section-${sectionKeySeed}`,
         resource_type: data.resource_type || 'video',
         resource_id: data.resource_id || undefined,
+        custom_text: data.custom_text || '',
         extra_type: data.extra_type === undefined ? 0 : Number(data.extra_type),
         extra_text: data.extra_text || ''
       }
@@ -288,32 +306,45 @@ export default {
       return this.resources[type] || []
     },
     resourceTypeName (type) {
-      return { video: '康复视频', image: '康复图片', text: '康复文字' }[type] || '资源'
+      return { video: '康复视频', image: '康复图片', text: '康复文字', custom_text: '自定义文字' }[type] || '资源'
     },
     resourceById (section) {
       return this.resourcesByType(section.resource_type).find(resource => resource.id === section.resource_id)
     },
     sectionTitle (section) {
+      if (section.resource_type === 'custom_text') return '自定义文字'
       const resource = this.resourceById(section)
       return resource ? resource.title : ''
     },
     resourceContent (section) {
+      if (section.resource_type === 'custom_text') return section.custom_text || ''
       const resource = this.resourceById(section)
       return resource ? resource.content : ''
     },
     resourceCover (section) {
+      if (section.resource_type === 'custom_text') return ''
       const resource = this.resourceById(section)
       return resource ? resource.cover : ''
     },
     resourceRemark (section) {
+      if (section.resource_type === 'custom_text') return ''
       const resource = this.resourceById(section)
       return resource ? resource.remark : ''
     },
     handleResourceTypeChange (section) {
       section.resource_id = undefined
+      if (section.resource_type === 'custom_text') {
+        section.extra_type = 0
+        section.extra_text = ''
+      } else {
+        section.custom_text = ''
+      }
     },
     addSection () {
       this.form.sections.push(this.createSection())
+    },
+    addCustomTextSection () {
+      this.form.sections.push(this.createSection({ resource_type: 'custom_text', extra_type: 0 }))
     },
     removeSection (index) {
       this.form.sections.splice(index, 1)
@@ -383,9 +414,14 @@ export default {
           this.$message.warning('请至少添加一个阶段正文部分')
           return
         }
-        const incompleteSection = this.form.sections.find(section => !section.resource_id)
+        const incompleteSection = this.form.sections.find(section => section.resource_type !== 'custom_text' && !section.resource_id)
         if (incompleteSection) {
           this.$message.warning('请为每个正文部分选择康复资源')
+          return
+        }
+        const emptyMaterialText = this.form.sections.find(section => section.resource_type === 'custom_text' && !String(section.custom_text || '').trim())
+        if (emptyMaterialText) {
+          this.$message.warning('自定义文字素材内容不能为空')
           return
         }
         const emptyCustomText = this.form.sections.find(section => section.extra_type === 2 && !String(section.extra_text || '').trim())
@@ -406,6 +442,7 @@ export default {
           sections: this.form.sections.map((section, index) => ({
             resource_type: section.resource_type,
             resource_id: section.resource_id,
+            custom_text: section.custom_text,
             extra_type: section.extra_type,
             extra_text: section.extra_text,
             sort: index
@@ -487,6 +524,15 @@ export default {
 
 .section-extra-text {
   margin-top: 8px;
+}
+
+.section-add-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.section-add-actions .ant-btn {
+  flex: 1;
 }
 
 .section-remark-preview {
