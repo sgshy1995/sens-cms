@@ -71,8 +71,13 @@
                 <a-button> <a-icon type="upload" /> 选择图片文件 </a-button>
               </a-upload>
             </a-form-item>
-            <a-form-item label="文章内容" required>
-              <wang-editor
+            <a-form-item
+              label="文章内容"
+              required
+              :label-col="{ span: 24 }"
+              :wrapper-col="{ span: 24 }"
+            >
+              <tiny-mce-editor
                 v-if="visible"
                 :value="editorContent"
                 :upload-url="uploadUrl"
@@ -115,7 +120,7 @@
 <script>
 import { fileBaseUrl } from '@/utils/fileUrl'
 import pick from 'lodash.pick'
-import WangEditor from '@/components/Editor/WangEditor'
+import TinyMceEditor from '@/components/Editor/TinyMceEditor'
 import { getAction } from '@/utils/manage'
 import {
   forumArticleApi,
@@ -144,7 +149,7 @@ export default {
     }
   },
   components: {
-    WangEditor
+    TinyMceEditor
   },
   data () {
     this.formLayout = {
@@ -259,7 +264,11 @@ export default {
       return item ? item.id : undefined
     },
     handleTagChange (tagId) {
-      this.selectedTagId = tagId || ''
+      const nextTagId = tagId || ''
+      if (this.selectedTagId === nextTagId) {
+        return
+      }
+      this.selectedTagId = nextTagId
       this.selectedItemIds = []
     },
     handleDictionarySelect (dictionaryId, itemId) {
@@ -296,11 +305,17 @@ export default {
       const newFileList = this.fileListImg.slice()
       newFileList.splice(index, 1)
       this.fileListImg = newFileList
+      if (this.coverUrl && this.coverUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(this.coverUrl)
+      }
       this.coverUrl = ''
       this.form.setFieldsValue({ cover: null })
     },
     beforeUploadImg (file) {
-      this.fileListImg = [...this.fileListImg, file]
+      if (this.coverUrl && this.coverUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(this.coverUrl)
+      }
+      this.fileListImg = [file]
       this.form.setFieldsValue({ cover: file })
       this.coverUrl = URL.createObjectURL(file)
       return false

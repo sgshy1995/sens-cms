@@ -364,11 +364,7 @@ export default {
           content,
           id: this.$refs.createModal.id || undefined
         }
-        if (Array.isArray(formIn.tag) && formIn.tag.length) {
-          formIn.tag = formIn.tag[formIn.tag.length - 1]
-        } else {
-          formIn.tag = null
-        }
+        formIn.tag = this.$refs.createModal.selectedTagId || null
         const dictionaryItems = this.$refs.createModal.dictionaryItemsForSubmit()
         if (formIn.tag && !dictionaryItems.length) {
           this.$message.warning('请至少选择一个康复字典项')
