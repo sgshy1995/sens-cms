@@ -162,23 +162,13 @@ const rehabTextApi = {
   deleteOneById: (id) => `/rehab_text/id/${id}`
 }
 
-const rehabCombinationCourseApi = {
-  get: '/rehab_combination_course/custom',
-  create: '/rehab_combination_course',
-  update: '/rehab_combination_course',
-  getOneById: (id) => `/rehab_combination_course/id/${id}`,
-  deleteOneById: (id) => `/rehab_combination_course/id/${id}`,
-  updateStatus: (id) => `/rehab_combination_course/status/${id}`
+const rehabResourceApi = {
+  preflight: '/rehab_resource/preflight'
 }
 
-const rehabCombinationCourseStageApi = {
-  get: '/rehab_combination_course_stage/custom',
-  create: '/rehab_combination_course_stage',
-  update: '/rehab_combination_course_stage',
-  sort: '/rehab_combination_course_stage/sort',
-  getOneById: (id) => `/rehab_combination_course_stage/id/${id}`,
-  deleteOneById: (id) => `/rehab_combination_course_stage/id/${id}`,
-  updateStatus: (id) => `/rehab_combination_course_stage/status/${id}`
+const rehabPlanPriceApi = {
+  get: '/rehab_plan_price',
+  update: '/rehab_plan_price'
 }
 
 export {
@@ -202,6 +192,6 @@ export {
   rehabVideoApi,
   rehabImageApi,
   rehabTextApi,
-  rehabCombinationCourseApi,
-  rehabCombinationCourseStageApi
+  rehabResourceApi,
+  rehabPlanPriceApi
 }

@@ -115,11 +115,11 @@ export const asyncRouterMap = [
             meta: { title: '康复文字', keepAlive: true, permission: ['recovery'] }
           },
           {
-            path: '/recovery/rehab_combination_course',
-            name: 'RehabCombinationCourse',
+            path: '/recovery/rehab_plan_price',
+            name: 'RehabPlanPrice',
             hideChildrenInMenu: true,
-            component: () => import('@/views/rehab_combination_course/RehabCombinationCourse'),
-            meta: { title: '康复组合课程', keepAlive: true, permission: ['recovery'] }
+            component: () => import('@/views/rehab_plan_price/RehabPlanPrice'),
+            meta: { title: '方案价格', keepAlive: true, permission: ['recovery'] }
           }
         ]
       },

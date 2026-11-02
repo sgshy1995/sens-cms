@@ -48,6 +48,16 @@
             {{ text === 1 ? '正常' : '禁用' }}
           </a-tag>
         </span>
+        <span slot="filterMode" slot-scope="text">
+          <span v-if="text === 'decrease'" class="filter-mode-decrease">
+            <a-icon type="arrow-down" />
+            <span>递减类</span>
+          </span>
+          <span v-else class="filter-mode-increase">
+            <a-icon type="arrow-up" />
+            <span>递增类</span>
+          </span>
+        </span>
         <span slot="updatedAt" slot-scope="text">
           {{ formatTime(text) }}
         </span>
@@ -92,6 +102,8 @@ const columns = [
   { title: '字典名称', dataIndex: 'name', width: '180px', ellipsis: true },
   { title: 'Code', dataIndex: 'code', width: '160px', ellipsis: true },
   { title: '所属处方标签', dataIndex: 'prescription_tag_id', width: '180px', ellipsis: true, scopedSlots: { customRender: 'tagName' } },
+  { title: '筛选类型', dataIndex: 'filter_mode', width: '130px', scopedSlots: { customRender: 'filterMode' } },
+  { title: '数据权重', dataIndex: 'data_weight', width: '100px' },
   { title: '字典项数量', dataIndex: 'item_count', width: '120px' },
   { title: '优先级', dataIndex: 'priority', width: '100px' },
   { title: '状态', dataIndex: 'status', width: '100px', scopedSlots: { customRender: 'status' } },
@@ -205,5 +217,20 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: middle;
+}
+
+.filter-mode-decrease,
+.filter-mode-increase {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-mode-decrease {
+  color: #f5222d;
+}
+
+.filter-mode-increase {
+  color: #52c41a;
 }
 </style>

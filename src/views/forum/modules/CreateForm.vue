@@ -33,8 +33,8 @@
                 </a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="康复字典" :required="!!selectedTagId">
-              <div class="field-tip">选择康复标签后，可在对应字典分类中分别选择一个字典项；每个字典分类只能单选。</div>
+            <a-form-item label="康复标签分类">
+              <div class="field-tip">仅可选择筛选数据递减类分类，每个分类最多选择一个标签项，也可以不选。</div>
               <a-empty v-if="!selectedTagId" description="请先选择康复标签" />
               <a-empty v-else-if="!currentTagDictionaries.length" description="该标签下暂无康复字典" />
               <div v-else class="dictionary-group">
@@ -200,7 +200,10 @@ export default {
   },
   computed: {
     currentTagDictionaries () {
-      return this.dictionaries.filter(dictionary => dictionary.prescription_tag_id === this.selectedTagId)
+      return this.dictionaries.filter(dictionary =>
+        dictionary.prescription_tag_id === this.selectedTagId &&
+        dictionary.filter_mode === 'decrease'
+      )
     }
   },
   methods: {
@@ -247,7 +250,7 @@ export default {
     },
     loadDictionaryOptions () {
       return Promise.all([
-        getAction(prescriptionTagDictionaryApi.getCustom, {}),
+        getAction(prescriptionTagDictionaryApi.getCustom, { filter_mode: 'decrease' }),
         getAction(prescriptionTagDictionaryItemApi.getAll, {})
       ]).then(([dictionaries, items]) => {
         this.dictionaries = dictionaries.data || []

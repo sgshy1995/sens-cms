@@ -75,7 +75,16 @@
             </a-tooltip>
           </template>
         </span>
-        <span slot="remark" slot-scope="text">
+        <span slot="label" slot-scope="text, record">
+          <div v-if="record.prescription_tag_name" class="label-summary">
+            <a-tag color="orange">{{ record.prescription_tag_name }}</a-tag>
+            <a-tooltip :title="dictionaryLabel(record)">
+              <span class="ellipsis-text">{{ dictionaryLabel(record) }}</span>
+            </a-tooltip>
+          </div>
+          <span v-else>-</span>
+        </span>
+        <span slot="description" slot-scope="text">
           <a-tooltip :title="text">
             <span class="ellipsis-text">{{ truncate(text, 30) }}</span>
           </a-tooltip>
@@ -176,11 +185,12 @@ const contentLabelMap = {
   text: '文字内容'
 }
 
-const createColumns = contentLabel => [
+const createColumns = (contentLabel, resourceType) => [
   { title: '#', dataIndex: 'index', width: '64px', customRender: (text, record, index) => index + 1 },
   { title: '标题', dataIndex: 'title', width: '180px', ellipsis: true },
+  { title: '康复标签', dataIndex: 'prescription_tag_id', width: '260px', scopedSlots: { customRender: 'label' } },
   { title: contentLabel, dataIndex: 'content', width: '220px', ellipsis: true, scopedSlots: { customRender: 'content' } },
-  { title: '备注', dataIndex: 'remark', width: '240px', ellipsis: true, scopedSlots: { customRender: 'remark' } },
+  ...(resourceType === 'text' ? [] : [{ title: '文字说明', dataIndex: 'description', width: '240px', ellipsis: true, scopedSlots: { customRender: 'description' } }]),
   { title: '状态', dataIndex: 'status', width: '100px', scopedSlots: { customRender: 'status' } },
   { title: '创建时间', dataIndex: 'created_at', width: '170px', scopedSlots: { customRender: 'createdAt' } },
   { title: '更新时间', dataIndex: 'updated_at', width: '170px', scopedSlots: { customRender: 'updatedAt' } },
@@ -207,7 +217,7 @@ export default {
     }
   },
   data () {
-    const columns = createColumns(contentLabelMap[this.resourceType] || '内容')
+    const columns = createColumns(contentLabelMap[this.resourceType] || '内容', this.resourceType)
     this.columns = this.resourceType === 'video'
       ? [
           ...columns.slice(0, 3),
@@ -248,6 +258,12 @@ export default {
     truncate (value, length) {
       if (!value) return '-'
       return value.length > length ? `${value.slice(0, length)}...` : value
+    },
+    dictionaryLabel (record) {
+      return (record.dictionary_items || [])
+        .map(item => item.dictionary_item_name || item.name || '')
+        .filter(Boolean)
+        .join('、') || '-'
     },
     openFile (path, record = {}) {
       const url = resolveFileUrl(path)
@@ -422,6 +438,13 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: middle;
+}
+
+.label-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
 }
 
 .video-preview-wrap {

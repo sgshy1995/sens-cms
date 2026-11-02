@@ -57,6 +57,9 @@
           </a-form-model-item>
           <a-form-model-item label="优先级" prop="priority">
             <a-input-number v-model="itemForm.priority" style="width: 100%" :precision="0" :min="0" :step="1" />
+            <div class="field-help">
+              用于同一分类内标签项排序：数值越大越靠前，但不会改变分类数据权重决定的先后顺序。
+            </div>
           </a-form-model-item>
           <a-form-model-item label="状态" prop="status">
             <a-select v-model="itemForm.status">
@@ -194,3 +197,12 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.field-help {
+  margin-top: 6px;
+  color: #8c8c8c;
+  font-size: 12px;
+  line-height: 18px;
+}
+</style>
