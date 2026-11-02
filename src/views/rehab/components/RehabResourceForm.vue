@@ -30,16 +30,34 @@
               </a-select>
             </a-form-model-item>
 
-            <a-form-model-item v-if="form.prescription_tag_id" label="康复标签分类" required>
+            <a-form-model-item v-if="form.prescription_tag_id" label="康复字典分类" required>
               <div class="dictionary-group">
                 <div v-for="dictionary in currentDictionaries" :key="dictionary.id" class="dictionary-block">
                   <div class="dictionary-block-title">
                     <span>{{ dictionary.name }}</span>
-                    <a-tag :color="dictionary.filter_mode === 'decrease' ? 'orange' : 'blue'">
-                      {{ dictionary.filter_mode === 'decrease' ? '递减类 · 必选' : '递增类 · 至少选一类' }}
-                    </a-tag>
+                    <span class="dictionary-block-actions">
+                      <a-tag :color="dictionary.filter_mode === 'decrease' ? 'orange' : 'blue'">
+                        {{ dictionary.filter_mode === 'decrease' ? '递减类 · 必选' : '递增类 · 至少选一类' }}
+                      </a-tag>
+                      <a v-if="selectedItemIdsInDictionary(dictionary.id).length" @click="clearDictionary(dictionary.id)">清除</a>
+                    </span>
                   </div>
+                  <a-checkbox-group
+                    v-if="isMultipleSelection(dictionary.id)"
+                    :value="selectedItemIdsInDictionary(dictionary.id)"
+                    @change="values => handleDictionarySelect(dictionary.id, values)"
+                  >
+                    <a-checkbox
+                      v-for="item in itemsByDictionary(dictionary.id)"
+                      :key="item.id"
+                      :value="item.id"
+                      class="dictionary-item-choice"
+                    >
+                      {{ item.name }}
+                    </a-checkbox>
+                  </a-checkbox-group>
                   <a-radio-group
+                    v-else
                     :value="selectedItemId(dictionary.id)"
                     @change="event => handleDictionarySelect(dictionary.id, event.target.value)"
                   >
@@ -47,7 +65,7 @@
                       v-for="item in itemsByDictionary(dictionary.id)"
                       :key="item.id"
                       :value="item.id"
-                      class="dictionary-item-radio"
+                      class="dictionary-item-choice"
                     >
                       {{ item.name }}
                     </a-radio>
@@ -267,30 +285,48 @@ export default {
     itemsByDictionary (dictionaryId) {
       return this.dictionaryItems.filter(item => item.dictionary_id === dictionaryId && item.status === 1)
     },
-    selectedItemId (dictionaryId) {
-      return this.selectedItemIds.find(id => {
+    selectedItemIdsInDictionary (dictionaryId) {
+      return this.selectedItemIds.filter(id => {
         const item = this.dictionaryItems.find(dictionaryItem => dictionaryItem.id === id)
         return item && item.dictionary_id === dictionaryId
       })
     },
-    handleDictionarySelect (dictionaryId, itemId) {
+    selectedItemId (dictionaryId) {
+      return this.selectedItemIdsInDictionary(dictionaryId)[0]
+    },
+    isMultipleSelection (dictionaryId) {
+      const dictionary = this.currentDictionaries.find(item => item.id === dictionaryId)
+      return !!dictionary && dictionary.selection_mode === 'multiple'
+    },
+    handleDictionarySelect (dictionaryId, itemIds) {
       const remain = this.selectedItemIds.filter(id => {
         const item = this.dictionaryItems.find(dictionaryItem => dictionaryItem.id === id)
         return item && item.dictionary_id !== dictionaryId
       })
-      this.selectedItemIds = itemId ? [...remain, itemId] : remain
+      const nextIds = Array.isArray(itemIds) ? itemIds : itemIds ? [itemIds] : []
+      const validIds = nextIds.filter(id => {
+        const item = this.dictionaryItems.find(dictionaryItem => dictionaryItem.id === id)
+        return item && item.dictionary_id === dictionaryId
+      })
+      this.selectedItemIds = [
+        ...remain,
+        ...(this.isMultipleSelection(dictionaryId) ? validIds : validIds.slice(0, 1))
+      ]
+    },
+    clearDictionary (dictionaryId) {
+      this.handleDictionarySelect(dictionaryId, [])
     },
     validateLabelSelection () {
       if (!this.form.prescription_tag_id) {
         throw new Error('请选择康复标签')
       }
       for (const dictionary of this.currentDictionaries) {
-        if (dictionary.filter_mode === 'decrease' && !this.selectedItemId(dictionary.id)) {
+        if (dictionary.filter_mode === 'decrease' && !this.selectedItemIdsInDictionary(dictionary.id).length) {
           throw new Error(`请选择「${dictionary.name}」`)
         }
       }
       const increaseDictionaries = this.currentDictionaries.filter(item => item.filter_mode === 'increase')
-      if (increaseDictionaries.length > 0 && !increaseDictionaries.some(item => this.selectedItemId(item.id))) {
+      if (increaseDictionaries.length > 0 && !increaseDictionaries.some(item => this.selectedItemIdsInDictionary(item.id).length)) {
         throw new Error('递增类康复标签至少选择一个分类')
       }
       return this.selectedItemIds.map(id => {
@@ -503,7 +539,13 @@ export default {
   color: #333;
 }
 
-.dictionary-item-radio {
+.dictionary-block-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dictionary-item-choice {
   display: inline-flex;
   margin-right: 16px;
   margin-bottom: 6px;

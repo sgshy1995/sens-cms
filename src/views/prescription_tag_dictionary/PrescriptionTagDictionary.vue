@@ -58,6 +58,9 @@
             <span>递增类</span>
           </span>
         </span>
+        <span slot="selectionMode" slot-scope="text">
+          {{ text === 'multiple' ? '多选' : '单选' }}
+        </span>
         <span slot="updatedAt" slot-scope="text">
           {{ formatTime(text) }}
         </span>
@@ -103,6 +106,7 @@ const columns = [
   { title: 'Code', dataIndex: 'code', width: '160px', ellipsis: true },
   { title: '所属处方标签', dataIndex: 'prescription_tag_id', width: '180px', ellipsis: true, scopedSlots: { customRender: 'tagName' } },
   { title: '筛选类型', dataIndex: 'filter_mode', width: '130px', scopedSlots: { customRender: 'filterMode' } },
+  { title: '选择方式', dataIndex: 'selection_mode', width: '110px', scopedSlots: { customRender: 'selectionMode' } },
   { title: '数据权重', dataIndex: 'data_weight', width: '100px' },
   { title: '字典项数量', dataIndex: 'item_count', width: '120px' },
   { title: '优先级', dataIndex: 'priority', width: '100px' },

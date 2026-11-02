@@ -46,6 +46,15 @@
                 </a-radio>
               </a-radio-group>
             </a-form-model-item>
+            <a-form-model-item label="选择方式" prop="selection_mode">
+              <a-radio-group v-model="form.selection_mode">
+                <a-radio value="single">单选</a-radio>
+                <a-radio value="multiple">多选</a-radio>
+              </a-radio-group>
+              <div class="field-help">
+                单选时该分类最多选择一个字典项；多选时该分类可以选择多个字典项。
+              </div>
+            </a-form-model-item>
             <a-form-model-item label="数据权重" prop="data_weight">
               <a-input-number
                 v-model="form.data_weight"
@@ -119,6 +128,7 @@ export default {
         code: [{ required: true, min: 1, max: 64, message: '请输入1-64个字符的字典 Code' }],
         name: [{ required: true, min: 1, max: 64, message: '请输入1-64个字符的字典名称' }],
         filter_mode: [{ required: true, trigger: 'change', message: '请选择筛选类型' }],
+        selection_mode: [{ required: true, trigger: 'change', message: '请选择字典分类选择方式' }],
         data_weight: [{ required: true, message: '请输入数据权重' }],
         priority: [{ required: true, message: '请输入优先级' }],
         status: [{ required: true, trigger: 'change', message: '请选择状态' }]
@@ -135,6 +145,7 @@ export default {
         code: '',
         name: '',
         filter_mode: 'decrease',
+        selection_mode: 'single',
         data_weight: 0,
         priority: 0,
         status: 1
@@ -147,6 +158,7 @@ export default {
         code: record.code,
         name: record.name,
         filter_mode: record.filter_mode,
+        selection_mode: record.selection_mode || 'single',
         data_weight: record.data_weight,
         priority: record.priority,
         status: record.status
@@ -165,6 +177,7 @@ export default {
           code: this.form.code,
           name: this.form.name,
           filter_mode: this.form.filter_mode,
+          selection_mode: this.form.selection_mode,
           data_weight: this.form.data_weight,
           priority: this.form.priority,
           status: this.form.status
